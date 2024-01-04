@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import QrReader from "react-qr-scanner";
-import "./QRScanner.scss";
 
 export const QRScanner = () => {
-  const [scanResult, setScanResult] = useState("test");
   const [delay, setDelay] = useState(100);
+  const [scanResult, setScanResult] = useState("test");
+  // const [scanComplete, setScanComplete] = useState(false);
 
   const handleScan = (data) => {
-    setScanResult(data);
+    console.log("scanning");
+    if (data) {
+      setScanResult(data);
+      console.log("scan", data);
+    }
   };
 
   const handleError = (err) => {
-    console.error(err);
+    console.error("error", err);
   };
 
   return (
