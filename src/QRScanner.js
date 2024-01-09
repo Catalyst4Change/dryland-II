@@ -2,15 +2,24 @@ import React, { useState } from "react";
 import QrReader from "react-qr-scanner";
 
 export const QRScanner = () => {
-  const [delay, setDelay] = useState(100);
-  const [scanResult, setScanResult] = useState("test");
+  const [delay] = useState(100);
+  const [timeStamp, setTimeStamp] = useState(null);
+  const [scannedData, setScannedData] = useState(null);
+  const [scannedProduct, setScannedProduct] = useState(null);
+  const [scannedBatch, setScannedBatch] = useState(null);
+  const [scannedSize, setScannedSize] = useState(null);
+  const [scannedQuantity, setScannedQuantity] = useState(null);
+  const [scannedDataDisplay, setScannedDataDisplay] = useState(null);
+
   // const [scanComplete, setScanComplete] = useState(false);
 
   const handleScan = (data) => {
     console.log("scanning");
     if (data) {
-      setScanResult(data);
-      console.log("scan", data);
+      parseScanData(data.text);
+      convertTimeStamp(data.timestamp);
+      console.log("fullscan", data);
+      console.log("scantext", data.text);
     }
   };
 
@@ -18,11 +27,56 @@ export const QRScanner = () => {
     console.error("error", err);
   };
 
+  const convertTimeStamp = (timeStamp) => {
+    // Create a new Date object from the timestamp
+    const date = new Date(timeStamp);
+
+    // Format the date
+    // Get the day, month, year, hours, and minutes
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // +1 because months are 0-indexed
+    const year = date.getFullYear().toString().slice(-2); // Get the last two digits of the year
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    // Combine to get the formatted string
+    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+    setTimeStamp(formattedDate);
+    // Outputs the date in DD/MM/YY HH:MM format
+  };
+
+  const parseScanData = (data) => {
+    // Assuming a format like "Scan Data|Product|Batch|Bottle Size|Quantity"
+    const parts = data.split("|");
+
+    if (parts.length === 4) {
+      const [product, batch, bottleSize, quantity] = parts;
+      setScannedProduct(product);
+      setScannedBatch(batch);
+      setScannedSize(bottleSize);
+      setScannedQuantity(quantity);
+      setScannedDataDisplay(
+        `${scanData} ${product} ${batch} ${bottleSize} ${quantity}`
+      );
+    } else {
+      // Handle invalid QR code data format
+      console.error("Invalid QR code data format!");
+      return null;
+    }
+  };
+
   return (
     <main>
       <div className="scanner-window">
         <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+        <p>
+          {scannedDataDisplay} {timeStamp}
+        </p>
       </div>
     </main>
   );
 };
+
+// verify scan data - done!
+// fwd to g.sheets api

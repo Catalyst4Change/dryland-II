@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { QRScanner } from "./QRScanner";
-import { GAPI } from "./GAPI";
+import { LogIn } from "./LogIn";
 
 export const App = () => {
   const [user, setUser] = useState(null);
@@ -12,7 +12,7 @@ export const App = () => {
 
   return (
     <main>
-      <GAPI user={user} setUserName={setUserName} />
+      <LogIn user={user} setUserName={setUserName} />
       {user && <QRScanner />}
     </main>
   );

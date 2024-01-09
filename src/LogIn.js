@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
 
-export const GAPI = ({ user, setUserName }) => {
+export const LogIn = ({ user, setUserName }) => {
   const CLIENT_ID =
     "972542105-n3s9l6ea9ajihtfjacm8m8fq66q9hdpq.apps.googleusercontent.com";
   const DISCOVERY_DOCS = [
