@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
 
-export const GAPI = () => {
-  const [user, setUser] = useState(null);
-
-  const setUserName = (userName) => {
-    console.log("setUserName()", userName);
-    setUser(userName);
-  };
-
+export const GAPI = ({ user, setUserName }) => {
   const CLIENT_ID =
     "972542105-n3s9l6ea9ajihtfjacm8m8fq66q9hdpq.apps.googleusercontent.com";
   const DISCOVERY_DOCS = [
@@ -58,6 +51,7 @@ export const GAPI = () => {
 
   const handleSignOutClick = () => {
     gapi.auth2.getAuthInstance().signOut();
+    setUserName(null);
   };
 
   useEffect(() => {
