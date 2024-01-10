@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { QRScanner } from "./QRScanner";
 import { LogIn } from "./LogIn";
 import logo from "./Assets/DrylandLogo.png";
+import "./App.css";
+
 export const App = () => {
   const [user, setUser] = useState(null);
 
