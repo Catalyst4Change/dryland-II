@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { gapi } from "gapi-script";
+import "./App.css";
 
 export const LogIn = ({ user, setUserName }) => {
   // Google Auth info
@@ -63,8 +64,13 @@ export const LogIn = ({ user, setUserName }) => {
   }, []);
 
   return (
-    <div>
-      {!user && <button onClick={handleSignInClick}>Log In</button>}
+    <div className="center">
+      {!user && (
+        <div>
+          <h2>Please Log In to continue.</h2>
+          <button onClick={handleSignInClick}>Log In</button>
+        </div>
+      )}
       {user && (
         <div>
           <h2>Welcome, {user}!</h2>

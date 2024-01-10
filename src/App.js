@@ -14,8 +14,8 @@ export const App = () => {
 
   return (
     <main>
-      <div className="logo_conatiner">
-        <img src={logo} alt="Drayland Distillery Logo" />
+      <div className="logo_container">
+        <img src={logo} alt="Dryland Distillery Logo" />
       </div>
       <LogIn user={user} setUserName={setUserName} />
       {user && <QRScanner user={user} />}

@@ -1,6 +1,20 @@
-.logo_conatiner {
-  width: 100vw;
+button {
+  font-size: large;
+  background-color: darkslategrey;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 100px;
 }
+
 img {
   width: 100%;
+}
+
+.center {
+  text-align: center;
+}
+
+.logo_container {
+  width: 90vw;
+  margin: auto;
 }
