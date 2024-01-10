@@ -7,7 +7,7 @@ export const LogIn = ({ user, setUserName }) => {
   const DISCOVERY_DOCS = [
     "https://sheets.googleapis.com/$discovery/rest?version=v4",
   ];
-  const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+  const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
   const initClient = () => {
     console.log("initClient()");

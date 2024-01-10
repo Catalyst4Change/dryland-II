@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { QRScanner } from "./QRScanner";
 import { LogIn } from "./LogIn";
+import { SendToSheet } from "./SendToSheet";
 
 export const App = () => {
   const [user, setUser] = useState(null);
@@ -13,7 +14,7 @@ export const App = () => {
   return (
     <main>
       <LogIn user={user} setUserName={setUserName} />
-      {user && <QRScanner />}
+      {user && <QRScanner user={user} />}
     </main>
   );
 };

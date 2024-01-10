@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import QrReader from "react-qr-scanner";
+import { SendToSheet } from "./SendToSheet";
 
-export const QRScanner = () => {
+export const QRScanner = ({ user }) => {
   const [delay] = useState(100);
   const [timeStamp, setTimeStamp] = useState(null);
-  const [scannedData, setScannedData] = useState(null);
   const [scannedProduct, setScannedProduct] = useState(null);
   const [scannedBatch, setScannedBatch] = useState(null);
   const [scannedSize, setScannedSize] = useState(null);
   const [scannedQuantity, setScannedQuantity] = useState(null);
-  const [scannedDataDisplay, setScannedDataDisplay] = useState(null);
 
   // const [scanComplete, setScanComplete] = useState(false);
 
@@ -40,14 +39,14 @@ export const QRScanner = () => {
     const minutes = date.getMinutes().toString().padStart(2, "0");
 
     // Combine to get the formatted string
-    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+    const formattedDate = `${month}/${day}/${year} ${hours}:${minutes}`;
 
     setTimeStamp(formattedDate);
     // Outputs the date in DD/MM/YY HH:MM format
   };
 
   const parseScanData = (data) => {
-    // Assuming a format like "Scan Data|Product|Batch|Bottle Size|Quantity"
+    // Assuming a format like "Product|Batch|Bottle Size|Quantity"
     const parts = data.split("|");
 
     if (parts.length === 4) {
@@ -56,9 +55,6 @@ export const QRScanner = () => {
       setScannedBatch(batch);
       setScannedSize(bottleSize);
       setScannedQuantity(quantity);
-      setScannedDataDisplay(
-        `${scanData} ${product} ${batch} ${bottleSize} ${quantity}`
-      );
     } else {
       // Handle invalid QR code data format
       console.error("Invalid QR code data format!");
@@ -66,14 +62,27 @@ export const QRScanner = () => {
     }
   };
 
+  const saveScannedData = () => {
+    SendToSheet(
+      scannedProduct,
+      scannedBatch,
+      scannedSize,
+      scannedQuantity,
+      timeStamp,
+      user
+    );
+  };
+
   return (
     <main>
       <div className="scanner-window">
         <QrReader delay={delay} onError={handleError} onScan={handleScan} />
-        <p>
-          {scannedDataDisplay} {timeStamp}
-        </p>
       </div>
+      <p>
+        {scannedProduct},{scannedBatch},{scannedSize},{scannedQuantity},
+        {timeStamp},{user}
+      </p>
+      {scannedProduct && <button onClick={saveScannedData}>SAVE</button>}
     </main>
   );
 };
