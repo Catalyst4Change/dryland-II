@@ -25,6 +25,18 @@ module.exports = {
           "sass-loader", // Compiles Sass to CSS
         ],
       },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]", // Output file name and extension as-is
+              outputPath: "images", // Specify the output directory for images
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
