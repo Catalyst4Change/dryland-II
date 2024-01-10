@@ -1,18 +1,19 @@
 import { gapi } from "gapi-script";
 
-export const SendToSheet = ({
+export const SendToSheet = (
   product,
   batch,
   bottleSize,
   quantity,
   timeStamp,
-  user,
-}) => {
+  user
+) => {
   const appendDataToSheet = () => {
     if (!gapi.client) {
       console.error("Google API not loaded!");
       return;
     }
+
     const params = {
       spreadsheetId: "1iMdJeg9hhvP8pKldf01Ymfpw77QPMDqo-6T6IJTgbQg",
       range: "Sheet1",
