@@ -10,22 +10,18 @@ export const QRScanner = ({ user }) => {
   const [scannedSize, setScannedSize] = useState(null);
   const [scannedQuantity, setScannedQuantity] = useState(null);
 
-  // const [scanComplete, setScanComplete] = useState(false);
-
   const handleScan = (data) => {
-    console.log("scanning");
     if (data) {
       parseScanData(data.text);
       convertTimeStamp(data.timestamp);
-      console.log("fullscan", data);
-      console.log("scantext", data.text);
     }
   };
 
   const handleError = (err) => {
-    console.error("error", err);
+    console.error("Scan Error: ", err);
   };
 
+  // Takes timestamp from QRreader data and converts to readable format
   const convertTimeStamp = (timeStamp) => {
     // Create a new Date object from the timestamp
     const date = new Date(timeStamp);
@@ -46,7 +42,7 @@ export const QRScanner = ({ user }) => {
   };
 
   const parseScanData = (data) => {
-    // Assuming a format like "Product|Batch|Bottle Size|Quantity"
+    // Assuming a format of "Product|Batch|Bottle Size|Quantity"
     const parts = data.split("|");
 
     if (parts.length === 4) {
@@ -78,14 +74,15 @@ export const QRScanner = ({ user }) => {
       <div className="scanner-window">
         <QrReader delay={delay} onError={handleError} onScan={handleScan} />
       </div>
-      <p>
-        {scannedProduct},{scannedBatch},{scannedSize},{scannedQuantity},
-        {timeStamp},{user}
-      </p>
-      {scannedProduct && <button onClick={saveScannedData}>SAVE</button>}
+      {scannedProduct && (
+        <div>
+          <p>
+            Product: {scannedProduct}, Batch: {scannedBatch}, Size:{" "}
+            {scannedSize}, Quantity: {scannedQuantity}
+          </p>
+          <button onClick={saveScannedData}>SAVE</button>
+        </div>
+      )}
     </main>
   );
 };
-
-// verify scan data - done!
-// fwd to g.sheets api

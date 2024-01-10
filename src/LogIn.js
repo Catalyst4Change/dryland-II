@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { gapi } from "gapi-script";
 
 export const LogIn = ({ user, setUserName }) => {
+  // Google Auth info
   const CLIENT_ID =
     "972542105-n3s9l6ea9ajihtfjacm8m8fq66q9hdpq.apps.googleusercontent.com";
   const DISCOVERY_DOCS = [
@@ -9,8 +10,8 @@ export const LogIn = ({ user, setUserName }) => {
   ];
   const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
+  // Connect to google API
   const initClient = () => {
-    console.log("initClient()");
     return gapi.client
       .init({
         clientId: CLIENT_ID,
@@ -27,10 +28,9 @@ export const LogIn = ({ user, setUserName }) => {
       );
   };
 
+  //App user signs in to google
   const updateSignInStatus = (isSignedIn) => {
-    console.log("updateSignInStatus()");
     if (isSignedIn) {
-      console.log("updateSignInStatus: ", isSignedIn);
       const profile = gapi.auth2
         .getAuthInstance()
         .currentUser.get()
@@ -38,9 +38,6 @@ export const LogIn = ({ user, setUserName }) => {
       const userName = profile.getName();
       console.log("userName: ", userName);
       setUserName(userName);
-      // make API calls
-    } else {
-      // handle sign in process
     }
   };
 
@@ -54,6 +51,7 @@ export const LogIn = ({ user, setUserName }) => {
     setUserName(null);
   };
 
+  // Avoids reload errors by ensuring user stays logged in
   useEffect(() => {
     gapi.load("client:auth2", () => {
       initClient().then(() => {
@@ -66,12 +64,11 @@ export const LogIn = ({ user, setUserName }) => {
 
   return (
     <div>
-      <h2>GAPI</h2>
-      {!user && <button onClick={handleSignInClick}>Sign In</button>}
+      {!user && <button onClick={handleSignInClick}>Log In</button>}
       {user && (
         <div>
-          <p>Welcome, {user}!</p>
-          <button onClick={handleSignOutClick}>Sign Out</button>
+          <h2>Welcome, {user}!</h2>
+          <button onClick={handleSignOutClick}>Log Out</button>
         </div>
       )}
     </div>
