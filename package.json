@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "firebase": "^10.7.1",
     "gapi-script": "^1.2.0",
     "google-api-javascript-client": "^0.1.0",
     "react": "^18.2.0",

@@ -18,3 +18,14 @@ img {
   width: 90vw;
   margin: auto;
 }
+
+.scanner-window {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  border: 2px black solid;
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 10px auto;
+}
