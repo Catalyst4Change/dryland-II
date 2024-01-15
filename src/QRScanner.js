@@ -73,10 +73,12 @@ export const QRScanner = ({ user }) => {
   return (
     <main>
       <div className="scanner-window">
-        <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+        <div className="qr-scanner-container">
+          <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+        </div>
       </div>
       {scannedProduct && (
-        <div>
+        <div className="center">
           <p>
             Product: {scannedProduct}, Batch: {scannedBatch}, Size:{" "}
             {scannedSize}, Quantity: {scannedQuantity}
