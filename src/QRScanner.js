@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import QrReader from "react-qr-scanner"
 import { SendToSheet } from "./SendToSheet"
+import { convertTimeStamp } from "./timestampConverter"
 import "./App.css"
 
 export const QRScanner = ({ user }) => {
@@ -10,38 +11,17 @@ export const QRScanner = ({ user }) => {
   const [scannedBatch, setScannedBatch] = useState(null)
   const [scannedSize, setScannedSize] = useState(null)
   const [scannedQuantity, setScannedQuantity] = useState(null)
-  const [scanError, setScanError] = useState(null)
+  const [userMessage, setUserMessage] = useState(null)
 
   const handleScan = (data) => {
     if (data) {
       parseScanData(data.text)
-      convertTimeStamp(data.timestamp)
+      setTimeStamp(convertTimeStamp(data.timestamp))
     }
   }
 
   const handleError = (err) => {
-    setScanError(err)
-    console.error("Scan Error: ", err)
-  }
-
-  // Takes timestamp from QRreader data and converts to readable format
-  const convertTimeStamp = (timeStamp) => {
-    // Create a new Date object from the timestamp
-    const date = new Date(timeStamp)
-
-    // Format the date
-    // Get the day, month, year, hours, and minutes
-    const day = date.getDate().toString().padStart(2, "0")
-    const month = (date.getMonth() + 1).toString().padStart(2, "0") // +1 because months are 0-indexed
-    const year = date.getFullYear().toString().slice(-2) // Get the last two digits of the year
-    const hours = date.getHours().toString().padStart(2, "0")
-    const minutes = date.getMinutes().toString().padStart(2, "0")
-
-    // Combine to get the formatted string
-    const formattedDate = `${month}/${day}/${year} ${hours}:${minutes}`
-
-    setTimeStamp(formattedDate)
-    // Outputs the date in DD/MM/YY HH:MM format
+    displayMessage("Scan Error: ", err)
   }
 
   const parseScanData = (data) => {
@@ -56,9 +36,24 @@ export const QRScanner = ({ user }) => {
       setScannedQuantity(quantity)
     } else {
       // Handle invalid QR code data format
-      console.error("Invalid QR code data format!")
+      handleError("Invalid QR code data format!")
       return null
     }
+  }
+
+  const displayMessage = (message) => {
+    setUserMessage(message)
+    setTimeout(() => {
+      setUserMessage(null)
+    }, 3000)
+  }
+
+  const clearScanData = () => {
+    setScannedProduct(null)
+    setScannedBatch(null)
+    setScannedSize(null)
+    setScannedQuantity(null)
+    displayMessage("Data sent successfully!")
   }
 
   const saveScannedData = () => {
@@ -70,10 +65,11 @@ export const QRScanner = ({ user }) => {
       timeStamp,
       user
     )
+    clearScanData()
   }
 
   return (
-    <main>
+    <main className="center">
       <div className="scanner-window">
         <div className="qr-scanner-container">
           <QrReader
@@ -85,17 +81,19 @@ export const QRScanner = ({ user }) => {
         </div>
       </div>
       {scannedProduct && (
-        <div className="center">
+        <div>
           <p>
             Product: {scannedProduct}, Batch: {scannedBatch}, Size:{" "}
             {scannedSize}, Quantity: {scannedQuantity}
           </p>
-          <button onClick={saveScannedData}>SAVE</button>
+          <button type="button" onClick={saveScannedData}>
+            SAVE
+          </button>
         </div>
       )}
-      {scanError && (
+      {userMessage && (
         <div>
-          <p>Error! {scanError}</p>
+          <p>{userMessage}</p>
         </div>
       )}
     </main>
