@@ -9,7 +9,7 @@
     "build": "webpack --mode production"
   },
   "keywords": [],
-  "author": "",
+  "author": "CATALYST",
   "license": "ISC",
   "dependencies": {
     "firebase": "^10.7.1",

@@ -1,6 +1,12 @@
 {
   "hosting": {
     "site": "dryland",
-    "public": "build"
+    "public": "build",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }
