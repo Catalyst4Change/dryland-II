@@ -10,6 +10,7 @@ export const QRScanner = ({ user }) => {
   const [scannedBatch, setScannedBatch] = useState(null)
   const [scannedSize, setScannedSize] = useState(null)
   const [scannedQuantity, setScannedQuantity] = useState(null)
+  const [scanError, setScanError] = useState(null)
 
   const handleScan = (data) => {
     if (data) {
@@ -19,6 +20,7 @@ export const QRScanner = ({ user }) => {
   }
 
   const handleError = (err) => {
+    setScanError(err)
     console.error("Scan Error: ", err)
   }
 
@@ -89,6 +91,11 @@ export const QRScanner = ({ user }) => {
             {scannedSize}, Quantity: {scannedQuantity}
           </p>
           <button onClick={saveScannedData}>SAVE</button>
+        </div>
+      )}
+      {scanError && (
+        <div>
+          <p>Error! {scanError}</p>
         </div>
       )}
     </main>
