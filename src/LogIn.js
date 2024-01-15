@@ -37,13 +37,11 @@ export const LogIn = ({ user, setUserName }) => {
         .currentUser.get()
         .getBasicProfile();
       const userName = profile.getName();
-      console.log("userName: ", userName);
       setUserName(userName);
     }
   };
 
   const handleSignInClick = () => {
-    console.log("handleSignInClick()");
     gapi.auth2.getAuthInstance().signIn();
   };
 

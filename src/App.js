@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import { QRScanner } from "./QRScanner";
-import { LogIn } from "./LogIn";
-import logo from "./Assets/DrylandLogo.png";
-import "./App.css";
+import React, { useState } from "react"
+import { QRScanner } from "./QRScanner"
+import { LogIn } from "./LogIn"
+import logo from "./Assets/DrylandLogo.png"
+import "./App.css"
 
 export const App = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
 
   const setUserName = (userName) => {
-    console.log("setUserName()", userName);
-    setUser(userName);
-  };
+    setUser(userName)
+  }
 
   return (
     <main>
@@ -20,5 +19,5 @@ export const App = () => {
       <LogIn user={user} setUserName={setUserName} />
       {user && <QRScanner user={user} />}
     </main>
-  );
-};
+  )
+}

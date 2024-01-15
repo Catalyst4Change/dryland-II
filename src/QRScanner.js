@@ -4,7 +4,7 @@ import { SendToSheet } from "./SendToSheet"
 import "./App.css"
 
 export const QRScanner = ({ user }) => {
-  const [delay] = useState(100)
+  const [delay] = useState(500)
   const [timeStamp, setTimeStamp] = useState(null)
   const [scannedProduct, setScannedProduct] = useState(null)
   const [scannedBatch, setScannedBatch] = useState(null)
@@ -74,7 +74,12 @@ export const QRScanner = ({ user }) => {
     <main>
       <div className="scanner-window">
         <div className="qr-scanner-container">
-          <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+          <QrReader
+            constraints={{ video: { facingMode: "environment" } }}
+            delay={delay}
+            onError={handleError}
+            onScan={handleScan}
+          />
         </div>
       </div>
       {scannedProduct && (
