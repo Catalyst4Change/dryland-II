@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import QrReader from "react-qr-scanner"
 import { SendToSheet } from "./SendToSheet"
 import { convertTimeStamp } from "./timestampConverter"
 import xButton from "./Assets/close.png"
 import "./App.css"
+
+const QrReader = React.lazy(() => import("react-qr-scanner"))
 
 export const QRScanner = ({ user }) => {
   const [userMessage, setUserMessage] = useState(null)
