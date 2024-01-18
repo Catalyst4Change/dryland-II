@@ -1,6 +1,6 @@
 button {
   font-size: large;
-  background-color: darkslategrey;
+  background-color: #477979;
   color: white;
   border: none;
   border-radius: 5px;
@@ -57,7 +57,7 @@ img {
 
 .scanner-window {
   position: relative;
-  box-sizing: border-box;
+  box-sizing: content-box;
   display: flex;
   align-items: center;
   place-items: center;
@@ -69,7 +69,12 @@ img {
   max-height: 500px;
   overflow: hidden;
 
-  border: 2px black solid;
+  border: 3px black solid;
   border-radius: 15px;
   margin: 10px auto;
+}
+
+.green {
+  border: 3px lime solid;
+  transition: border-color 1s ease-out;
 }

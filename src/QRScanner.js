@@ -9,6 +9,8 @@ export const QRScanner = ({ user }) => {
   const [userMessage, setUserMessage] = useState(null)
   const [qrReaderKey, setQrReaderKey] = useState(0)
   const [allScans, setAllScans] = useState([])
+  const [validScan, setValidScan] = useState(false)
+  const validQRCodePattern = /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[0-9]+\|[0-9]+$/
 
   const handleScan = (data) => {
     console.log("scanning")
@@ -16,6 +18,13 @@ export const QRScanner = ({ user }) => {
       const currentTimeStamp = convertTimeStamp(data.timestamp)
       parseScanData(data.text, currentTimeStamp)
     }
+  }
+
+  const scannerBorderFlashGreen = () => {
+    setValidScan(true)
+    setTimeout(() => {
+      setValidScan(false)
+    }, 1000)
   }
 
   const handleError = (err) => {
@@ -27,7 +36,7 @@ export const QRScanner = ({ user }) => {
     const parts = data.split("|")
     console.log("scanned", parts)
 
-    if (parts.length === 4) {
+    if (validQRCodePattern) {
       const [product, batch, bottleSize, quantity] = parts
       const scanData = [timeStamp, product, batch, bottleSize, quantity, user]
 
@@ -42,6 +51,7 @@ export const QRScanner = ({ user }) => {
 
       if (!isDuplicate) {
         setAllScans((prevScans) => [...prevScans, scanData])
+        scannerBorderFlashGreen()
       } else {
         handleError("Duplicate scan detected!")
       }
@@ -86,10 +96,11 @@ export const QRScanner = ({ user }) => {
 
   return (
     <main className="center">
-      <div className="scanner-window">
+      <div className={`scanner-window ${validScan ? "green" : ""}`}>
         <div className="qr-scanner-container">
           <QrReader
             key={qrReaderKey}
+            delay={1000}
             constraints={{ video: { facingMode: "environment" } }}
             onError={handleError}
             onScan={handleScan}
