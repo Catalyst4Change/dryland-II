@@ -21,3 +21,10 @@ export const App = () => {
     </main>
   )
 }
+
+// add multiple scans before submission
+// delete item from pre-submission ist
+// remove data titles in display
+// plan B scan refresh button
+// spreadtsheet ID: 1eOjJmq4Ex8TuBQdFbmeUBcaPWRrKqxXgoNax8GnEspA
+// add regex detection to ensure flat string input (security)
