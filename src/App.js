@@ -22,7 +22,6 @@ export const App = () => {
   )
 }
 
-// add multiple scans before submission
 // delete item from pre-submission ist
 // remove data titles in display
 // plan B scan refresh button

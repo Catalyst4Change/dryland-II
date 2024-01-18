@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import QrReader from "react-qr-scanner"
 import { SendToSheet } from "./SendToSheet"
 import { convertTimeStamp } from "./timestampConverter"
+import xButton from "./Assets/close.png"
 import "./App.css"
 
 export const QRScanner = ({ user }) => {
@@ -63,11 +64,23 @@ export const QRScanner = ({ user }) => {
     displayMessage("Data sent successfully!")
   }
 
+  const removeItem = (index) => {
+    const updatedScans = [...allScans]
+    updatedScans.splice(index, 1)
+    setAllScans(updatedScans)
+  }
+
   const displayScannedData = () => {
     return allScans.map((scan, index) => (
-      <p key={index}>
-        {scan[1]} {scan[2]} {scan[3]} {scan[4]}
-      </p>
+      <span className="scan-display" key={index}>
+        {scan[1]} {scan[2]} {scan[3]} {scan[4]}{" "}
+        <button
+          className="remove-item-button"
+          onClick={() => removeItem(index)}
+        >
+          <img src={xButton} alt="remove from list" />
+        </button>
+      </span>
     ))
   }
 
