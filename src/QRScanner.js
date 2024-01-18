@@ -5,19 +5,15 @@ import { convertTimeStamp } from "./timestampConverter"
 import "./App.css"
 
 export const QRScanner = ({ user }) => {
-  const [timeStamp, setTimeStamp] = useState(null)
-  const [scannedProduct, setScannedProduct] = useState(null)
-  const [scannedBatch, setScannedBatch] = useState(null)
-  const [scannedSize, setScannedSize] = useState(null)
-  const [scannedQuantity, setScannedQuantity] = useState(null)
   const [userMessage, setUserMessage] = useState(null)
   const [qrReaderKey, setQrReaderKey] = useState(0)
+  const [allScans, setAllScans] = useState([])
 
   const handleScan = (data) => {
     console.log("scanning")
     if (data) {
-      parseScanData(data.text)
-      setTimeStamp(convertTimeStamp(data.timestamp))
+      const currentTimeStamp = convertTimeStamp(data.timestamp)
+      parseScanData(data.text, currentTimeStamp)
     }
   }
 
@@ -25,21 +21,31 @@ export const QRScanner = ({ user }) => {
     displayMessage("Scan Error: ", err)
   }
 
-  const parseScanData = (data) => {
+  const parseScanData = (data, timeStamp) => {
     // Assuming a format of "Product|Batch|Bottle Size|Quantity"
     const parts = data.split("|")
-    console.log("scanned", data)
+    console.log("scanned", parts)
 
     if (parts.length === 4) {
       const [product, batch, bottleSize, quantity] = parts
-      setScannedProduct(product)
-      setScannedBatch(batch)
-      setScannedSize(bottleSize)
-      setScannedQuantity(quantity)
+      const scanData = [timeStamp, product, batch, bottleSize, quantity, user]
+
+      // Check if the scan already exists in allScans
+      const isDuplicate = allScans.some(
+        (scan) =>
+          scan[1] === product &&
+          scan[2] === batch &&
+          scan[3] === bottleSize &&
+          scan[4] === quantity
+      )
+
+      if (!isDuplicate) {
+        setAllScans((prevScans) => [...prevScans, scanData])
+      } else {
+        handleError("Duplicate scan detected!")
+      }
     } else {
-      // Handle invalid QR code data format
       handleError("Invalid QR code data format!")
-      return null
     }
   }
 
@@ -50,27 +56,19 @@ export const QRScanner = ({ user }) => {
     }, 3000)
   }
 
-  const clearScanData = () => {
-    setScannedProduct(null)
-    setScannedBatch(null)
-    setScannedSize(null)
-    setScannedQuantity(null)
-    displayMessage("Data sent successfully!")
+  const saveAllScans = () => {
+    SendToSheet(allScans)
+    setAllScans([])
     setQrReaderKey((prevKey) => prevKey + 1)
-    console.log(qrReaderKey)
+    displayMessage("Data sent successfully!")
   }
 
-  const saveScannedData = (event) => {
-    event.preventDefault()
-    SendToSheet(
-      scannedProduct,
-      scannedBatch,
-      scannedSize,
-      scannedQuantity,
-      timeStamp,
-      user
-    )
-    clearScanData()
+  const displayScannedData = () => {
+    return allScans.map((scan, index) => (
+      <p key={index}>
+        {scan[1]} {scan[2]} {scan[3]} {scan[4]}
+      </p>
+    ))
   }
 
   return (
@@ -80,19 +78,16 @@ export const QRScanner = ({ user }) => {
           <QrReader
             key={qrReaderKey}
             constraints={{ video: { facingMode: "environment" } }}
-            delay="1000"
             onError={handleError}
             onScan={handleScan}
           />
         </div>
       </div>
-      {scannedProduct && (
+      {displayScannedData()}
+      {allScans && (
         <div>
-          <p>
-            Product: {scannedProduct}, Batch: {scannedBatch}, Size:{" "}
-            {scannedSize}, Quantity: {scannedQuantity}
-          </p>
-          <button type="button" onClick={(event) => saveScannedData(event)}>
+          <p></p>
+          <button type="button" onClick={(event) => saveAllScans(event)}>
             SAVE
           </button>
         </div>
