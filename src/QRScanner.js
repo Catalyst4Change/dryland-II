@@ -19,6 +19,7 @@ export const QRScanner = ({ user }) => {
     if (data) {
       const currentTimeStamp = convertTimeStamp(data.timestamp)
       parseScanData(data.text, currentTimeStamp)
+      updateScannerKey()
     }
   }
 
@@ -107,7 +108,7 @@ export const QRScanner = ({ user }) => {
               key={qrReaderKey}
               delay={1000}
               constraints={{ video: { facingMode: "environment" } }}
-              onError={handleScanError}
+              onError={() => handleScanError(error)}
               onScan={handleScan}
             />
           </div>

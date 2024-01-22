@@ -3,12 +3,15 @@ import { gapi } from "gapi-script"
 
 export const SendToSheet = ({ allScans }) => {
   const [sheetResponse, setSheetResponse] = useState("")
+  const [scansSubmitted, setScansSubmitted] = useState(false)
 
   const updateSheetResponse = (response) => {
     setSheetResponse(response)
   }
 
   const sendScansToSheet = () => {
+    setScansSubmitted(true)
+
     if (!gapi.client) {
       updateSheetResponse("Google API not loaded!")
       return
@@ -43,14 +46,14 @@ export const SendToSheet = ({ allScans }) => {
 
   return (
     <>
-      {allScans ? (
+      {allScans && !scansSubmitted ? (
         <button type="button" onClick={sendScansToSheet}>
           Submit Scans
         </button>
       ) : (
         ""
       )}
-      {sheetResponse ? sheetResponse : ""}
+      {sheetResponse ? <h2>{sheetResponse}</h2> : ""}
     </>
   )
 }
