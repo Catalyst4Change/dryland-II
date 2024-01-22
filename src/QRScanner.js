@@ -52,7 +52,8 @@ export const QRScanner = ({
 
       if (!isDuplicate) {
         setScannedData((prevScans) => [...prevScans, scanData])
-        scannerBorderFlashGreen()
+        setScanning(false)
+        setVerifyModalOpen(true)
       } else {
         handleScanError("Duplicate scan detected!")
       }
@@ -61,28 +62,15 @@ export const QRScanner = ({
     }
   }
 
-  const saveAllScans = () => {
-    setScanning(false)
-    setQrReaderKey((prevKey) => prevKey + 1)
-    setVerifyModalOpen(true)
-  }
-
   const updateScannerKey = () => {
     // renews scanner key to refresh dom and avoid scanner quit
     setQrReaderKey((prevKey) => prevKey + 1)
   }
 
-  const scannerBorderFlashGreen = () => {
-    setValidScan(true)
-    setTimeout(() => {
-      setValidScan(false)
-    }, 1000)
-  }
-
   return (
     <main className="center">
       {scanning ? (
-        <div className={`scanner-window ${validScan ? "green" : ""}`}>
+        <div className={"scanner-window "}>
           <div className="qr-scanner-container">
             <QrReader
               key={qrReaderKey}
@@ -92,15 +80,6 @@ export const QRScanner = ({
               onScan={handleScan}
             />
           </div>
-        </div>
-      ) : (
-        <></>
-      )}
-      {scannedData.length > 0 && scanning ? (
-        <div>
-          <button type="button" onClick={(event) => saveAllScans(event)}>
-            Done Scanning
-          </button>
         </div>
       ) : (
         <></>

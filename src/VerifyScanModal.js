@@ -7,8 +7,16 @@ export const VerifyScanModal = ({
   scannedData = [],
   setScannedData,
 }) => {
+  Modal.setAppElement("#root")
+
   const [timestamp, product, batch, size, quantity, user] = scannedData
-  const [quantityChange, setQuantityChange] = useState(quantity)
+  console.log(scannedData)
+
+  const [quantityChange, setQuantityChange] = useState("")
+
+  useEffect(() => {
+    setQuantityChange(quantity)
+  }, [quantity])
 
   const handleQuantityChange = (newValue) => {
     setQuantityChange(newValue)
