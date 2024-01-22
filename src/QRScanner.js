@@ -2,16 +2,22 @@ import React, { useState } from "react"
 import { SendToSheet } from "./SendToSheet"
 import xButton from "./Assets/close.png"
 import { convertTimeStamp } from "./timestampConverter"
+import { VerifyScanModal } from "./VerifyScanModal"
 import "./App.css"
 
 const QrReader = React.lazy(() => import("react-qr-scanner"))
 
-export const QRScanner = ({ user }) => {
-  const [userMessage, setUserMessage] = useState(null)
+export const QRScanner = ({
+  user,
+  setUserMessage,
+  scannedData,
+  setScannedData,
+  setVerifyModalOpen,
+}) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
-  const [allScans, setAllScans] = useState([])
   const [validScan, setValidScan] = useState(false)
   const [scanning, setScanning] = useState(true)
+
   const validQRCodePattern = /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[0-9]+\|[0-9]+$/
 
   const handleScan = (data) => {
@@ -23,15 +29,8 @@ export const QRScanner = ({ user }) => {
     }
   }
 
-  const scannerBorderFlashGreen = () => {
-    setValidScan(true)
-    setTimeout(() => {
-      setValidScan(false)
-    }, 1000)
-  }
-
   const handleScanError = (err) => {
-    displayMessage("Scan Error: ", err)
+    setUserMessage("Scan Error: " + err)
   }
 
   const parseScanData = (data, timeStamp) => {
@@ -43,7 +42,7 @@ export const QRScanner = ({ user }) => {
       const scanData = [timeStamp, product, batch, bottleSize, quantity, user]
 
       // Check if the scan already exists in allScans
-      const isDuplicate = allScans.some(
+      const isDuplicate = scannedData.some(
         (scan) =>
           scan[1] === product &&
           scan[2] === batch &&
@@ -52,7 +51,7 @@ export const QRScanner = ({ user }) => {
       )
 
       if (!isDuplicate) {
-        setAllScans((prevScans) => [...prevScans, scanData])
+        setScannedData((prevScans) => [...prevScans, scanData])
         scannerBorderFlashGreen()
       } else {
         handleScanError("Duplicate scan detected!")
@@ -62,22 +61,10 @@ export const QRScanner = ({ user }) => {
     }
   }
 
-  const displayMessage = (message) => {
-    setUserMessage(message)
-    setTimeout(() => {
-      setUserMessage("")
-    }, 3000)
-  }
-
   const saveAllScans = () => {
     setScanning(false)
     setQrReaderKey((prevKey) => prevKey + 1)
-  }
-
-  const removeItem = (index) => {
-    const updatedScans = [...allScans]
-    updatedScans.splice(index, 1)
-    setAllScans(updatedScans)
+    setVerifyModalOpen(true)
   }
 
   const updateScannerKey = () => {
@@ -85,18 +72,11 @@ export const QRScanner = ({ user }) => {
     setQrReaderKey((prevKey) => prevKey + 1)
   }
 
-  const displayScannedData = () => {
-    return allScans.map((scan, index) => (
-      <span className="scan-display" key={index}>
-        {scan[1]} {scan[2]} {scan[3]} {scan[4]}{" "}
-        <button
-          className="remove-item-button"
-          onClick={() => removeItem(index)}
-        >
-          <img src={xButton} alt="remove from list" />
-        </button>
-      </span>
-    ))
+  const scannerBorderFlashGreen = () => {
+    setValidScan(true)
+    setTimeout(() => {
+      setValidScan(false)
+    }, 1000)
   }
 
   return (
@@ -116,8 +96,7 @@ export const QRScanner = ({ user }) => {
       ) : (
         <></>
       )}
-      {displayScannedData()}
-      {allScans.length > 0 && scanning ? (
+      {scannedData.length > 0 && scanning ? (
         <div>
           <button type="button" onClick={(event) => saveAllScans(event)}>
             Done Scanning
@@ -126,12 +105,6 @@ export const QRScanner = ({ user }) => {
       ) : (
         <></>
       )}
-      {userMessage && (
-        <div>
-          <p>{userMessage}</p>
-        </div>
-      )}
-      {!scanning ? <SendToSheet allScans={allScans} /> : <></>}
     </main>
   )
 }
