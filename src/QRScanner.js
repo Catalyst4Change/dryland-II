@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { SendToSheet } from "./SendToSheet"
-import { convertTimeStamp } from "./timestampConverter"
 import xButton from "./Assets/close.png"
+import { convertTimeStamp } from "./timestampConverter"
 import "./App.css"
 
 const QrReader = React.lazy(() => import("react-qr-scanner"))
@@ -11,6 +11,7 @@ export const QRScanner = ({ user }) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
   const [allScans, setAllScans] = useState([])
   const [validScan, setValidScan] = useState(false)
+  const [scanning, setScanning] = useState(true)
   const validQRCodePattern = /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[0-9]+\|[0-9]+$/
 
   const handleScan = (data) => {
@@ -28,14 +29,13 @@ export const QRScanner = ({ user }) => {
     }, 1000)
   }
 
-  const handleError = (err) => {
+  const handleScanError = (err) => {
     displayMessage("Scan Error: ", err)
   }
 
   const parseScanData = (data, timeStamp) => {
     // Assuming a format of "Product|Batch|Bottle Size|Quantity"
     const parts = data.split("|")
-    console.log("scanned", parts)
 
     if (validQRCodePattern) {
       const [product, batch, bottleSize, quantity] = parts
@@ -54,10 +54,10 @@ export const QRScanner = ({ user }) => {
         setAllScans((prevScans) => [...prevScans, scanData])
         scannerBorderFlashGreen()
       } else {
-        handleError("Duplicate scan detected!")
+        handleScanError("Duplicate scan detected!")
       }
     } else {
-      handleError("Invalid QR code data format!")
+      handleScanError("Invalid QR code data format!")
     }
   }
 
@@ -69,16 +69,19 @@ export const QRScanner = ({ user }) => {
   }
 
   const saveAllScans = () => {
-    SendToSheet(allScans)
-    setAllScans([])
+    setScanning(false)
     setQrReaderKey((prevKey) => prevKey + 1)
-    displayMessage("Data sent successfully!")
   }
 
   const removeItem = (index) => {
     const updatedScans = [...allScans]
     updatedScans.splice(index, 1)
     setAllScans(updatedScans)
+  }
+
+  const updateScannerKey = () => {
+    // renews scanner key to refresh dom and avoid scanner quit
+    setQrReaderKey((prevKey) => prevKey + 1)
   }
 
   const displayScannedData = () => {
@@ -97,31 +100,37 @@ export const QRScanner = ({ user }) => {
 
   return (
     <main className="center">
-      <div className={`scanner-window ${validScan ? "green" : ""}`}>
-        <div className="qr-scanner-container">
-          <QrReader
-            key={qrReaderKey}
-            delay={1000}
-            constraints={{ video: { facingMode: "environment" } }}
-            onError={handleError}
-            onScan={handleScan}
-          />
+      {scanning ? (
+        <div className={`scanner-window ${validScan ? "green" : ""}`}>
+          <div className="qr-scanner-container">
+            <QrReader
+              key={qrReaderKey}
+              delay={1000}
+              constraints={{ video: { facingMode: "environment" } }}
+              onError={handleScanError}
+              onScan={handleScan}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
       {displayScannedData()}
-      {allScans && (
+      {allScans.length > 0 && scanning ? (
         <div>
-          <p></p>
           <button type="button" onClick={(event) => saveAllScans(event)}>
-            SAVE
+            Done Scanning
           </button>
         </div>
+      ) : (
+        <></>
       )}
       {userMessage && (
         <div>
           <p>{userMessage}</p>
         </div>
       )}
+      {!scanning ? <SendToSheet allScans={allScans} /> : <></>}
     </main>
   )
 }

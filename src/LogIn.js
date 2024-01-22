@@ -80,12 +80,12 @@ export const LogIn = ({ user, setUserName }) => {
           <button onClick={handleSignInClick}>Log In</button>
         </div>
       )}
-      {user && (
+      {/* {user && (
         <div>
           <h2>Welcome, {user}!</h2>
           <button onClick={handleSignOutClick}>Log Out</button>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

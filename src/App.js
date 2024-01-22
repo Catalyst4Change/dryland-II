@@ -24,3 +24,11 @@ export const App = () => {
     </main>
   )
 }
+// add no access error handling
+// add reload prompt if scanning stops
+// make quantity editable
+// confirm scans before submission
+// scan > prompt edit quantity > save > re-scan > submit
+
+// added matt
+// changed target sheet

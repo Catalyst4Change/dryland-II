@@ -64,9 +64,9 @@ img {
   justify-content: center;
 
   width: 90%;
-  max-width: 500px;
+  max-width: 300px;
   aspect-ratio: 1/1;
-  max-height: 500px;
+  max-height: 300px;
   overflow: hidden;
 
   border: 3px black solid;
