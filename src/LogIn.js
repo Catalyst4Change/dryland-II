@@ -5,7 +5,7 @@ import "./App.css"
 export const LogIn = ({ user, setUserName }) => {
   // Google Auth info
   const CLIENT_ID =
-    "972542105-n3s9l6ea9ajihtfjacm8m8fq66q9hdpq.apps.googleusercontent.com"
+    "163552366472-ksvonit6g3vu3j483rbaavto8i5rhlhf.apps.googleusercontent.com"
   const DISCOVERY_DOCS = [
     "https://sheets.googleapis.com/$discovery/rest?version=v4",
   ]

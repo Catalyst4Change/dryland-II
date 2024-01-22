@@ -9,7 +9,7 @@ export const SendToSheet = (allScans) => {
     }
 
     const params = {
-      spreadsheetId: "1iMdJeg9hhvP8pKldf01Ymfpw77QPMDqo-6T6IJTgbQg",
+      spreadsheetId: "1eOjJmq4Ex8TuBQdFbmeUBcaPWRrKqxXgoNax8GnEspA",
       range: "Sheet1",
       valueInputOption: "USER_ENTERED",
       insertDataOption: "INSERT_ROWS",

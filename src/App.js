@@ -18,15 +18,9 @@ export const App = () => {
       </div>
       <LogIn user={user} setUserName={setUserName} />
       {user && <QRScanner user={user} />}
-      <p>production branch</p>
-      <p>client id: catalyst</p>
-      <p>target sheet: demo</p>
+      <p>branch: multiscan</p>
+      <p>client id: dry land</p>
+      <p>target sheet: dry land batch scan log</p>
     </main>
   )
 }
-
-// delete item from pre-submission ist
-// remove data titles in display
-// plan B scan refresh button
-// spreadtsheet ID: 1eOjJmq4Ex8TuBQdFbmeUBcaPWRrKqxXgoNax8GnEspA
-// add regex detection to ensure flat string input (security)
