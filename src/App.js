@@ -19,7 +19,7 @@ export const App = () => {
       <LogIn user={user} setUserName={setUserName} />
       {user && <QRScanner user={user} />}
       <p>production branch</p>
-      <p>target sheet demo</p>
+      <p>target sheet: demo</p>
     </main>
   )
 }
