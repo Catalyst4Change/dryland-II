@@ -13,10 +13,10 @@ export const QRScanner = ({
   scannedData,
   setScannedData,
   setVerifyModalOpen,
+  setScanning,
 }) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
   const [validScan, setValidScan] = useState(false)
-  const [scanning, setScanning] = useState(true)
 
   const validQRCodePattern = /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[0-9]+\|[0-9]+$/
 
@@ -69,21 +69,17 @@ export const QRScanner = ({
 
   return (
     <main className="center">
-      {scanning ? (
-        <div className={"scanner-window "}>
-          <div className="qr-scanner-container">
-            <QrReader
-              key={qrReaderKey}
-              delay={1000}
-              constraints={{ video: { facingMode: "environment" } }}
-              onError={() => handleScanError(error)}
-              onScan={handleScan}
-            />
-          </div>
+      <div className={"scanner-window "}>
+        <div className="qr-scanner-container">
+          <QrReader
+            key={qrReaderKey}
+            delay={1000}
+            constraints={{ video: { facingMode: "environment" } }}
+            onError={(error) => handleScanError(error)}
+            onScan={handleScan}
+          />
         </div>
-      ) : (
-        <></>
-      )}
+      </div>
     </main>
   )
 }

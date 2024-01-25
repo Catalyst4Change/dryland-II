@@ -76,7 +76,7 @@ export const LogIn = ({ user, setUserName }) => {
     <div className="center">
       {!user && (
         <div>
-          <h2>Please Log In to continue.</h2>
+          <h3>Please Log In to continue.</h3>
           <button onClick={handleSignInClick}>Log In</button>
         </div>
       )}

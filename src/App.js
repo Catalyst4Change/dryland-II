@@ -11,15 +11,18 @@ export const App = () => {
   const [userMessage, setUserMessage] = useState("")
   const [scannedData, setScannedData] = useState([])
   const [verifyModalOpen, setVerifyModalOpen] = useState(false)
+  const [scanning, setScanning] = useState(false)
 
   const setUserName = (userName) => {
     setUser(userName)
+    setScanning(true)
   }
 
   return (
     <main>
+      <h1 className="center">Dry Land Batch Scanner</h1>
       <div className="logo_container">
-        <img src={logo} alt="Dryland Distillery Logo" />
+        <img src={logo} alt="Dry Land Distillery Logo" />
       </div>
 
       <LogIn user={user} setUserName={setUserName} />
@@ -29,13 +32,18 @@ export const App = () => {
         setUserMessage={setUserMessage}
       />
 
-      <QRScanner
-        user={user}
-        setUserMessage={setUserMessage}
-        scannedData={scannedData}
-        setScannedData={setScannedData}
-        setVerifyModalOpen={setVerifyModalOpen}
-      />
+      {scanning ? (
+        <QRScanner
+          user={user}
+          setUserMessage={setUserMessage}
+          scannedData={scannedData}
+          setScannedData={setScannedData}
+          setVerifyModalOpen={setVerifyModalOpen}
+          setScanning={setScanning}
+        />
+      ) : (
+        <></>
+      )}
 
       {/* verify data and quantity (modal) */}
 
@@ -44,6 +52,7 @@ export const App = () => {
         setVerifyModalOpen={setVerifyModalOpen}
         scannedData={scannedData[scannedData.length - 1]}
         setScannedData={setScannedData}
+        setScanning={setScanning}
       />
 
       {/* send verified data to sheet */}
@@ -54,11 +63,13 @@ export const App = () => {
     </main>
   )
 }
-// add no access error handling √
-// add reload prompt if scanning stops
-// make quantity editable
 // confirm scans before submission
-// login > scan > prompt edit quantity > save > re-scan... > submit
+// make sure multiple scans display
+// login > scan > prompt edit quantity > save > display removable list items > re-scan... > submit
 
-// added matt
-// changed target sheet
+// added matt √
+// changed target sheet √
+// make quantity editable √
+// add no access error handling √
+
+// add reload prompt if scanning stops X

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react"
 import Modal from "react-modal"
+import "./App.css"
 
 export const VerifyScanModal = ({
   verifyModalOpen,
   setVerifyModalOpen,
   scannedData = [],
   setScannedData,
+  setScanning,
 }) => {
   Modal.setAppElement("#root")
 
@@ -27,6 +29,7 @@ export const VerifyScanModal = ({
     updatedScan[4] = quantityChange
     setScannedData(updatedScan)
     setVerifyModalOpen(false)
+    setScanning(true)
   }
 
   return (
@@ -43,7 +46,9 @@ export const VerifyScanModal = ({
           onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
         />
       </div>
-      <button onClick={handleCloseModal}>Close</button>
+      <button className="adjust-quantity-button" onClick={handleCloseModal}>
+        Close
+      </button>
     </Modal>
   )
 }
