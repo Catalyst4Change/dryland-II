@@ -1,8 +1,5 @@
 import React, { useState } from "react"
-import { SendToSheet } from "./SendToSheet"
-import xButton from "./Assets/close.png"
 import { convertTimeStamp } from "./timestampConverter"
-import { VerifyScanModal } from "./VerifyScanModal"
 import "./App.css"
 
 const QrReader = React.lazy(() => import("react-qr-scanner"))

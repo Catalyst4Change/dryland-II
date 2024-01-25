@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import Modal from "react-modal"
 import "./App.css"
+Modal.setAppElement("#root")
 
 export const VerifyScanModal = ({
   verifyModalOpen,
@@ -9,19 +10,32 @@ export const VerifyScanModal = ({
   setScannedData,
   setScanning,
 }) => {
-  Modal.setAppElement("#root")
-
+  const [quantityChange, setQuantityChange] = useState()
   const [timestamp, product, batch, size, quantity, user] = scannedData
-  console.log(scannedData)
-
-  const [quantityChange, setQuantityChange] = useState("")
 
   useEffect(() => {
-    setQuantityChange(quantity)
+    const isNumber = () => {
+      return typeof quantity === "number"
+    }
+    console.log("isNumber", isNumber())
+    if (isNumber()) {
+      setQuantityChange(quantity)
+    } else {
+      setQuantityChange(0)
+    }
   }, [quantity])
 
-  const handleQuantityChange = (newValue) => {
-    setQuantityChange(newValue)
+  const handleQuantityChange = (value) => {
+    setQuantityChange(value)
+  }
+
+  const stepDown = () => {
+    if (quantityChange > 0) {
+      handleQuantityChange(quantityChange - 1)
+    }
+  }
+  const stepUp = () => {
+    handleQuantityChange(quantityChange + 1)
   }
 
   const handleCloseModal = () => {
@@ -38,17 +52,23 @@ export const VerifyScanModal = ({
       onRequestClose={onclose}
       contentLabel="Verify Scan"
     >
-      <h2>Adjust Quantity</h2>
-      <div>
-        <input
-          type="number"
-          value={quantityChange}
-          onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
-        />
-      </div>
-      <button className="adjust-quantity-button" onClick={handleCloseModal}>
-        Close
-      </button>
+      <form className="modal-form center" onSubmit={handleCloseModal}>
+        <h2>Verify Quantity</h2>
+        <div className="quantity-adjust">
+          <button type="button" className="stepper button" onClick={stepDown}>
+            -
+          </button>
+          <div>
+            <p className="quantity-display">{quantityChange}</p>
+          </div>
+          <button type="button" className="stepper button" onClick={stepUp}>
+            +
+          </button>
+        </div>
+        <button className="submit-quantity button" type="submit">
+          Done
+        </button>
+      </form>
     </Modal>
   )
 }

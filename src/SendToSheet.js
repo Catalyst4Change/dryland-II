@@ -47,7 +47,7 @@ export const SendToSheet = ({ allScans }) => {
   return (
     <>
       {allScans && !scansSubmitted ? (
-        <button type="button" onClick={sendScansToSheet}>
+        <button className="button" type="button" onClick={sendScansToSheet}>
           Submit Scans
         </button>
       ) : (
