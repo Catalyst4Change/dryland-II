@@ -4,16 +4,14 @@ import { LogIn } from "./LogIn"
 import { DisplayUserMessage } from "./DisplayUserMessage"
 import { EditScanModal } from "./EditScanModal"
 import { DisplayScans } from "./DisplayScans"
+import { SendToSheet } from "./SendToSheet"
 import logo from "./Assets/DrylandLogo.png"
 import "./App.css"
 
 export const App = () => {
   const [user, setUser] = useState(null)
   const [userMessage, setUserMessage] = useState("")
-  const [scannedData, setScannedData] = useState([
-    ["01/25/24, 12:20", "1", "2", "3", "4", "Catalyst"],
-    ["01/26/24, 12:20", "1", "2", "3", "4", "Catalyst"],
-  ])
+  const [scannedData, setScannedData] = useState([])
   const [editIndex, setEditIndex] = useState(null)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [scanning, setScanning] = useState(false)
@@ -32,22 +30,21 @@ export const App = () => {
   }
 
   return (
-    <main>
-      <h1 className="center">Dry Land Batch Scanner</h1>
+    <main className="App">
       <div className="logo_container">
         <img src={logo} alt="Dry Land Distillery Logo" />
       </div>
 
-      <LogIn user={user} setUserName={setUserName} />
-
-      <DisplayUserMessage
-        userMessage={userMessage}
+      <LogIn
+        user={user}
+        setUserName={setUserName}
         setUserMessage={setUserMessage}
       />
 
       {scanning ? (
         <QRScanner
           user={user}
+          userMessage={userMessage}
           setUserMessage={setUserMessage}
           scannedData={scannedData}
           setScannedData={setScannedData}
@@ -58,6 +55,11 @@ export const App = () => {
       ) : (
         <></>
       )}
+
+      <DisplayUserMessage
+        userMessage={userMessage}
+        setUserMessage={setUserMessage}
+      />
 
       <DisplayScans
         scannedData={scannedData}
@@ -80,9 +82,7 @@ export const App = () => {
 
       {/* send verified data to sheet */}
 
-      <p>branch: multiscan</p>
-      <p>client id: dry land</p>
-      <p>target sheet: dry land batch scan log</p>
+      <SendToSheet scannedData={scannedData} setUserMessage={setUserMessage} />
     </main>
   )
 }

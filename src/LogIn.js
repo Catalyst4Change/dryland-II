@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { gapi } from "gapi-script"
 import "./App.css"
 
-export const LogIn = ({ user, setUserName }) => {
+export const LogIn = ({ user, setUserName, setUserMessage }) => {
   // Google Auth info
   const CLIENT_ID =
     "163552366472-ksvonit6g3vu3j483rbaavto8i5rhlhf.apps.googleusercontent.com"
@@ -47,11 +47,11 @@ export const LogIn = ({ user, setUserName }) => {
       .signIn()
       .catch((error) => {
         if (error.error === "popup_closed_by_user") {
-          console.log("user canceled login")
+          setUserMessage("User canceled login.")
         } else if (error.error === "access_denied") {
-          console.log("access denied")
+          setUserMessage("Access denied. Please request access.")
         } else {
-          console.error("Login error: ", error)
+          setUserMessage("Login error: " + error)
         }
       })
   }
@@ -77,7 +77,9 @@ export const LogIn = ({ user, setUserName }) => {
       {!user && (
         <div>
           <h3>Please Log In to continue.</h3>
-          <button className="button" onClick={handleSignInClick}>Log In</button>
+          <button className="button" onClick={handleSignInClick}>
+            Log In
+          </button>
         </div>
       )}
       {/* {user && (

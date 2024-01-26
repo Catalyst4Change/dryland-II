@@ -1,19 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import { gapi } from "gapi-script"
+import "./App.css"
 
-export const SendToSheet = ({ allScans }) => {
-  const [sheetResponse, setSheetResponse] = useState("")
-  const [scansSubmitted, setScansSubmitted] = useState(false)
-
-  const updateSheetResponse = (response) => {
-    setSheetResponse(response)
-  }
-
+export const SendToSheet = ({ scannedData, setUserMessage }) => {
   const sendScansToSheet = () => {
-    setScansSubmitted(true)
-
     if (!gapi.client) {
-      updateSheetResponse("Google API not loaded!")
+      setUserMessage("Google API not loaded!")
       return
     }
 
@@ -25,7 +17,7 @@ export const SendToSheet = ({ allScans }) => {
     }
 
     const valueRangeBody = {
-      values: allScans,
+      values: scannedData,
     }
 
     const request = gapi.client.sheets.spreadsheets.values.append(
@@ -34,10 +26,11 @@ export const SendToSheet = ({ allScans }) => {
     )
     request.then(
       function (response) {
-        updateSheetResponse("Data sent to sheet." + response)
+        console.log(response)
+        setUserMessage("Data sent successfully!")
       },
       function (reason) {
-        updateSheetResponse(
+        setUserMessage(
           "Error sending data to sheet: " + reason.result.error.message
         )
       }
@@ -45,15 +38,12 @@ export const SendToSheet = ({ allScans }) => {
   }
 
   return (
-    <>
-      {allScans && !scansSubmitted ? (
+    <div className="send-to-sheet">
+      {scannedData.length > 0 ? (
         <button className="button" type="button" onClick={sendScansToSheet}>
           Submit Scans
         </button>
-      ) : (
-        ""
-      )}
-      {sheetResponse ? <h2>{sheetResponse}</h2> : ""}
-    </>
+      ) : null}
+    </div>
   )
 }

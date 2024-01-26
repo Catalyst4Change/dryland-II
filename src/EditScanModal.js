@@ -41,7 +41,8 @@ export const EditScanModal = ({
     handleQuantityChange(quantityChange + 1)
   }
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (event) => {
+    event.preventDefault()
     const updatedScannedData = [...scannedData]
     updatedScannedData[editIndex][4] = quantityChange
     setScannedData(updatedScannedData)
@@ -56,7 +57,10 @@ export const EditScanModal = ({
       onRequestClose={onclose}
       contentLabel="Edit Scan"
     >
-      <form className="modal-form center" onSubmit={handleCloseModal}>
+      <form
+        className="modal-form center"
+        onSubmit={(event) => handleCloseModal(event)}
+      >
         <h2>Edit Quantity</h2>
         <div className="quantity-adjust">
           <button type="button" className="stepper button" onClick={stepDown}>

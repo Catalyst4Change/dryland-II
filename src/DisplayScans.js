@@ -19,11 +19,8 @@ export const DisplayScans = ({
     setScannedData(updatedScans)
   }
 
-  console.log(scannedData)
-
   return (
-    <div className="center">
-      <h3>Scan List</h3>
+    <div className="scan-display center">
       {scannedData.map((scan, index) => {
         const readableString = scan.join(" - ") // Create a readable string for the inner array
         return (

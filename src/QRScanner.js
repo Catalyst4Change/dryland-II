@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { convertTimeStamp } from "./timestampConverter"
 import "./App.css"
 
@@ -6,6 +6,7 @@ const QrReader = React.lazy(() => import("react-qr-scanner"))
 
 export const QRScanner = ({
   user,
+  userMessage,
   setUserMessage,
   scannedData,
   setScannedData,
@@ -16,7 +17,8 @@ export const QRScanner = ({
   const [qrReaderKey, setQrReaderKey] = useState(0)
   // const [validScan, setValidScan] = useState(false)
 
-  const validQRCodePattern = /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[0-9]+\|[0-9]+$/
+  const validQRCodePattern =
+    /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[A-Za-z0-9]+\|[A-Za-z0-9]+$/
 
   const handleScan = (data) => {
     console.log("scanning")
@@ -35,7 +37,7 @@ export const QRScanner = ({
     // Assuming a format of "Product|Batch|Bottle Size|Quantity"
     const parts = data.split("|")
 
-    if (validQRCodePattern) {
+    if (validQRCodePattern.test(data)) {
       const [product, batch, bottleSize, quantity] = parts
       const scanData = [timeStamp, product, batch, bottleSize, quantity, user]
 
@@ -52,7 +54,7 @@ export const QRScanner = ({
         setScannedData((prevScans) => [...prevScans, scanData])
         setScanning(false)
         toggleEditModal()
-        setEditIndex(scannedData.length - 1)
+        setEditIndex(scannedData.length)
       } else {
         handleScanError("Duplicate scan detected!")
       }
@@ -66,6 +68,10 @@ export const QRScanner = ({
     setQrReaderKey((prevKey) => prevKey + 1)
   }
 
+  useEffect(() => {
+    updateScannerKey()
+  }, [scannedData, setScanning, userMessage])
+
   return (
     <main className="center">
       <div className={"scanner-window "}>
@@ -75,7 +81,7 @@ export const QRScanner = ({
             delay={1000}
             constraints={{ video: { facingMode: "environment" } }}
             onError={(error) => handleScanError(error)}
-            onScan={handleScan}
+            onScan={(data) => handleScan(data)}
           />
         </div>
       </div>
