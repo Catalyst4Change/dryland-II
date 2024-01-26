@@ -1,19 +1,22 @@
 import React from "react"
 
-export const DisplayScans = ({ scannedData, changeEditIndex }) => {
+export const DisplayScans = ({
+  scannedData,
+  setScannedData,
+  changeEditIndex,
+  toggleEditModal,
+}) => {
   const handleEdit = (index) => {
     changeEditIndex(index)
-    // Implement edit functionality here
-    // You can open a modal or form for editing the selected scan
-    console.log("Edit scan at index:", index)
+    toggleEditModal()
   }
 
   const handleRemove = (index) => {
     // Implement remove functionality here
     // You can remove the selected scan from the scans array
-    const updatedScans = [...scans]
+    const updatedScans = [...scannedData]
     updatedScans.splice(index, 1)
-    setScans(updatedScans)
+    setScannedData(updatedScans)
   }
 
   console.log(scannedData)
@@ -27,10 +30,18 @@ export const DisplayScans = ({ scannedData, changeEditIndex }) => {
           <div className="display-scan-option" key={index}>
             <span>{readableString}</span>
             <div className="display-scan-option-buttons">
-              <button className="button" type="button" onClick={handleEdit}>
+              <button
+                className="button"
+                type="button"
+                onClick={() => handleEdit(index)}
+              >
                 Edit
               </button>
-              <button className="button" type="button" onClick={handleRemove}>
+              <button
+                className="button"
+                type="button"
+                onClick={() => handleRemove(index)}
+              >
                 Delete
               </button>
             </div>

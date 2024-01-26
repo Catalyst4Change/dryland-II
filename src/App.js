@@ -61,7 +61,9 @@ export const App = () => {
 
       <DisplayScans
         scannedData={scannedData}
+        setScannedData={setScannedData}
         changeEditIndex={changeEditIndex}
+        toggleEditModal={toggleEditModal}
       />
 
       {/* edit data and quantity (modal) */}

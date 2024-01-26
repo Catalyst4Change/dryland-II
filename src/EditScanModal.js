@@ -19,12 +19,10 @@ export const EditScanModal = ({
       : ["", "", "", "", "", ""]
 
   useEffect(() => {
-    const isNumber = () => {
-      return typeof quantity === "number"
-    }
-    console.log("isNumber", isNumber())
-    if (isNumber()) {
-      setQuantityChange(quantity)
+    const parsedQuantity = parseInt(quantity)
+
+    if (!isNaN(parsedQuantity)) {
+      setQuantityChange(parsedQuantity)
     } else {
       setQuantityChange(0)
     }
