@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { QRScanner } from "./QRScanner"
 import { LogIn } from "./LogIn"
 import { DisplayUserMessage } from "./DisplayUserMessage"
-import { VerifyScanModal } from "./VerifyScanModal"
+import { EditScanModal } from "./EditScanModal"
 import { DisplayScans } from "./DisplayScans"
 import logo from "./Assets/DrylandLogo.png"
 import "./App.css"
@@ -15,12 +15,20 @@ export const App = () => {
     ["01/26/24, 12:20", "1", "2", "3", "4", "Catalyst"],
   ])
   const [editIndex, setEditIndex] = useState(null)
-  const [verifyModalOpen, setVerifyModalOpen] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false)
   const [scanning, setScanning] = useState(false)
+
+  const toggleEditModal = () => {
+    setEditModalOpen((editModalOpen) => !editModalOpen)
+  }
 
   const setUserName = (userName) => {
     setUser(userName)
     setScanning(true)
+  }
+
+  const changeEditIndex = (target) => {
+    setEditIndex(target)
   }
 
   return (
@@ -44,20 +52,23 @@ export const App = () => {
           scannedData={scannedData}
           setScannedData={setScannedData}
           setEditIndex={setEditIndex}
-          setVerifyModalOpen={setVerifyModalOpen}
+          toggleEditModal={toggleEditModal}
           setScanning={setScanning}
         />
       ) : (
         <></>
       )}
 
-      <DisplayScans scannedData={scannedData} />
+      <DisplayScans
+        scannedData={scannedData}
+        changeEditIndex={changeEditIndex}
+      />
 
-      {/* verify data and quantity (modal) */}
+      {/* edit data and quantity (modal) */}
 
-      <VerifyScanModal
-        verifyModalOpen={verifyModalOpen}
-        setVerifyModalOpen={setVerifyModalOpen}
+      <EditScanModal
+        editModalOpen={editModalOpen}
+        toggleEditModal={toggleEditModal}
         scannedData={scannedData}
         editIndex={editIndex}
         setEditIndex={setEditIndex}

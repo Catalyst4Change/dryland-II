@@ -1,7 +1,8 @@
 import React from "react"
 
-export const DisplayScans = ({ scannedData }) => {
+export const DisplayScans = ({ scannedData, changeEditIndex }) => {
   const handleEdit = (index) => {
+    changeEditIndex(index)
     // Implement edit functionality here
     // You can open a modal or form for editing the selected scan
     console.log("Edit scan at index:", index)

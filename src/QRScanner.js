@@ -10,7 +10,7 @@ export const QRScanner = ({
   scannedData,
   setScannedData,
   setEditIndex,
-  setVerifyModalOpen,
+  toggleEditModal,
   setScanning,
 }) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
@@ -51,7 +51,7 @@ export const QRScanner = ({
       if (!isDuplicate) {
         setScannedData((prevScans) => [...prevScans, scanData])
         setScanning(false)
-        setVerifyModalOpen(true)
+        toggleEditModal()
         setEditIndex(scannedData.length - 1)
       } else {
         handleScanError("Duplicate scan detected!")

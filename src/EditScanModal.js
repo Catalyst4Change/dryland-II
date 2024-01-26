@@ -3,9 +3,9 @@ import Modal from "react-modal"
 import "./App.css"
 Modal.setAppElement("#root")
 
-export const VerifyScanModal = ({
-  verifyModalOpen,
-  setVerifyModalOpen,
+export const EditScanModal = ({
+  editModalOpen,
+  toggleEditModal,
   scannedData,
   editIndex,
   setEditIndex,
@@ -47,19 +47,19 @@ export const VerifyScanModal = ({
     const updatedScannedData = [...scannedData]
     updatedScannedData[editIndex][4] = quantityChange
     setScannedData(updatedScannedData)
-    setVerifyModalOpen(false)
+    toggleEditModal()
     setEditIndex(null)
     setScanning(true)
   }
 
   return (
     <Modal
-      isOpen={verifyModalOpen}
+      isOpen={editModalOpen}
       onRequestClose={onclose}
-      contentLabel="Verify Scan"
+      contentLabel="Edit Scan"
     >
       <form className="modal-form center" onSubmit={handleCloseModal}>
-        <h2>Verify Quantity</h2>
+        <h2>Edit Quantity</h2>
         <div className="quantity-adjust">
           <button type="button" className="stepper button" onClick={stepDown}>
             -
