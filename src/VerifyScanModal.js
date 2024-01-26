@@ -6,12 +6,17 @@ Modal.setAppElement("#root")
 export const VerifyScanModal = ({
   verifyModalOpen,
   setVerifyModalOpen,
-  scannedData = [],
+  scannedData,
+  editIndex,
+  setEditIndex,
   setScannedData,
   setScanning,
 }) => {
   const [quantityChange, setQuantityChange] = useState()
-  const [timestamp, product, batch, size, quantity, user] = scannedData
+  const [timestamp, product, batch, size, quantity, user] =
+    scannedData[editIndex] || editIndex !== null
+      ? scannedData[editIndex]
+      : ["", "", "", "", "", ""]
 
   useEffect(() => {
     const isNumber = () => {
@@ -39,10 +44,11 @@ export const VerifyScanModal = ({
   }
 
   const handleCloseModal = () => {
-    const updatedScan = [...scannedData]
-    updatedScan[4] = quantityChange
-    setScannedData(updatedScan)
+    const updatedScannedData = [...scannedData]
+    updatedScannedData[editIndex][4] = quantityChange
+    setScannedData(updatedScannedData)
     setVerifyModalOpen(false)
+    setEditIndex(null)
     setScanning(true)
   }
 

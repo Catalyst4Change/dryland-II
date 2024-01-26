@@ -9,11 +9,12 @@ export const QRScanner = ({
   setUserMessage,
   scannedData,
   setScannedData,
+  setEditIndex,
   setVerifyModalOpen,
   setScanning,
 }) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
-  const [validScan, setValidScan] = useState(false)
+  // const [validScan, setValidScan] = useState(false)
 
   const validQRCodePattern = /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[0-9]+\|[0-9]+$/
 
@@ -51,6 +52,7 @@ export const QRScanner = ({
         setScannedData((prevScans) => [...prevScans, scanData])
         setScanning(false)
         setVerifyModalOpen(true)
+        setEditIndex(scannedData.length - 1)
       } else {
         handleScanError("Duplicate scan detected!")
       }
@@ -59,8 +61,8 @@ export const QRScanner = ({
     }
   }
 
+  // Renews scanner key to refresh dom and avoid scanner quit
   const updateScannerKey = () => {
-    // renews scanner key to refresh dom and avoid scanner quit
     setQrReaderKey((prevKey) => prevKey + 1)
   }
 
