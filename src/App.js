@@ -5,6 +5,7 @@ import { DisplayUserMessage } from "./DisplayUserMessage"
 import { EditScanModal } from "./EditScanModal"
 import { DisplayScans } from "./DisplayScans"
 import { SendToSheet } from "./SendToSheet"
+import { SentScansList } from "./SentScansList"
 import logo from "./Assets/DrylandLogo.png"
 import "./App.css"
 
@@ -15,6 +16,7 @@ export const App = () => {
   const [editIndex, setEditIndex] = useState(null)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [scanning, setScanning] = useState(false)
+  const [sentScans, setSentScans] = useState([])
 
   const toggleEditModal = () => {
     setEditModalOpen((editModalOpen) => !editModalOpen)
@@ -30,6 +32,7 @@ export const App = () => {
   }
 
   const clearScannedData = () => {
+    setSentScans([...sentScans, scannedData])
     setScannedData([])
   }
 
@@ -91,21 +94,22 @@ export const App = () => {
         setUserMessage={setUserMessage}
         clearScannedData={clearScannedData}
       />
+      <SentScansList sentScans={sentScans} />
     </main>
   )
 }
-// space bar causing invalid qr error
-// sending to sheet clears scannedData
-// need cancel edit quantity button
-// deny camera error loop
+// sent scans stored in new array
 // confirm scans before submission
 // login > scan > prompt edit quantity > save > display removable list items > re-scan... > submit
 
 // added matt √
 // changed target sheet √
 // make quantity editable √
+// deny camera error loop √
 // add no access error handling √
 // make sure multiple scans display √
+// need cancel edit quantity button √
 // remove scanned data on sendToSheet √
+// space bar causing invalid qr error √
 
 // add reload prompt if scanning stops X
