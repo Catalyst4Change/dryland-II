@@ -29,6 +29,10 @@ export const App = () => {
     setEditIndex(target)
   }
 
+  const clearScannedData = () => {
+    setScannedData([])
+  }
+
   return (
     <main className="App">
       <div className="logo_container">
@@ -82,17 +86,26 @@ export const App = () => {
 
       {/* send verified data to sheet */}
 
-      <SendToSheet scannedData={scannedData} setUserMessage={setUserMessage} />
+      <SendToSheet
+        scannedData={scannedData}
+        setUserMessage={setUserMessage}
+        clearScannedData={clearScannedData}
+      />
     </main>
   )
 }
+// space bar causing invalid qr error
+// sending to sheet clears scannedData
+// need cancel edit quantity button
+// deny camera error loop
 // confirm scans before submission
-// make sure multiple scans display
 // login > scan > prompt edit quantity > save > display removable list items > re-scan... > submit
 
 // added matt √
 // changed target sheet √
 // make quantity editable √
 // add no access error handling √
+// make sure multiple scans display √
+// remove scanned data on sendToSheet √
 
 // add reload prompt if scanning stops X

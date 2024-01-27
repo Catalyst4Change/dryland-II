@@ -2,7 +2,11 @@ import React from "react"
 import { gapi } from "gapi-script"
 import "./App.css"
 
-export const SendToSheet = ({ scannedData, setUserMessage }) => {
+export const SendToSheet = ({
+  scannedData,
+  setUserMessage,
+  clearScannedData,
+}) => {
   const sendScansToSheet = () => {
     if (!gapi.client) {
       setUserMessage("Google API not loaded!")
@@ -28,6 +32,7 @@ export const SendToSheet = ({ scannedData, setUserMessage }) => {
       function (response) {
         console.log(response)
         setUserMessage("Data sent successfully!")
+        clearScannedData()
       },
       function (reason) {
         setUserMessage(
