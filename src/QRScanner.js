@@ -18,10 +18,11 @@ export const QRScanner = ({
   // const [validScan, setValidScan] = useState(false)
 
   const validQRCodePattern =
-    /^[A-Za-z0-9]+\|[A-Za-z0-9]+\|[A-Za-z0-9]+\|[A-Za-z0-9]+$/
+    /^[A-Za-z0-9 ]+\|[A-Za-z0-9 ]+\|[A-Za-z0-9 ]+\|[A-Za-z0-9 ]+$/
+  // product | batch | size | quantity
 
   const handleScan = (data) => {
-    console.log("scanning")
+    console.log(data)
     if (data) {
       const currentTimeStamp = convertTimeStamp(data.timestamp)
       parseScanData(data.text, currentTimeStamp)
