@@ -22,7 +22,6 @@ export const QRScanner = ({
   // product | batch | size | quantity
 
   const handleScan = (data) => {
-    console.log(data)
     if (data) {
       const currentTimeStamp = convertTimeStamp(data.timestamp)
       parseScanData(data.text, currentTimeStamp)

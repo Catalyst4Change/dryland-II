@@ -30,7 +30,6 @@ export const SendToSheet = ({
     )
     request.then(
       function (response) {
-        console.log(response)
         setUserMessage("Data sent successfully!")
         clearScannedData()
       },

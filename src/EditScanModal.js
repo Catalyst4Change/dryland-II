@@ -42,7 +42,6 @@ export const EditScanModal = ({
   }
 
   const handleSubmit = (event) => {
-    console.log("submitted")
     event.preventDefault()
     const updatedScannedData = [...scannedData]
     updatedScannedData[editIndex][4] = quantityChange

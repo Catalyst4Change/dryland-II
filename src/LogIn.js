@@ -24,7 +24,7 @@ export const LogIn = ({ user, setUserName, setUserMessage }) => {
           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus)
         },
         (error) => {
-          console.log("Error loading Google API client! ", error)
+          setUserMessage("Error loading Google API client! ", error)
         }
       )
   }
