@@ -1,9 +1,14 @@
+$neutral-color: darkorange;
+$negative-color: firebrick;
+$positive-color: green;
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background-color: white;
 }
 
 img {
@@ -23,13 +28,21 @@ img {
 
 .button {
   font-size: large;
-  background-color: #477979;
   width: 100%;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
+  &.negative {
+    background-color: $negative-color;
+  }
+  &.neutral {
+    background-color: $neutral-color;
+  }
+  &.positive {
+    background-color: $positive-color;
+  }
 }
 
 .center {
@@ -49,7 +62,7 @@ img {
   margin: 10px 0;
 }
 
-.display-scan-option-buttons {
+.option-buttons {
   display: flex;
   flex-direction: row;
   width: 100%;

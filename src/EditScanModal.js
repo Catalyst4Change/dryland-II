@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import Modal from "react-modal"
-import "./App.css"
+import "./App.scss"
 Modal.setAppElement("#root")
 
 export const EditScanModal = ({
@@ -41,7 +41,8 @@ export const EditScanModal = ({
     handleQuantityChange(quantityChange + 1)
   }
 
-  const handleCloseModal = (event) => {
+  const handleSubmit = (event) => {
+    console.log("submitted")
     event.preventDefault()
     const updatedScannedData = [...scannedData]
     updatedScannedData[editIndex][4] = quantityChange
@@ -49,6 +50,12 @@ export const EditScanModal = ({
     toggleEditModal()
     setEditIndex(null)
     setScanning(true)
+  }
+
+  const handleCancel = () => {
+    toggleEditModal() // Close the modal
+    setEditIndex(null) // Reset the edit index
+    setScanning(false) // Reset scanning state if needed
   }
 
   return (
@@ -59,7 +66,7 @@ export const EditScanModal = ({
     >
       <form
         className="modal-form center"
-        onSubmit={(event) => handleCloseModal(event)}
+        onSubmit={(event) => handleSubmit(event)}
       >
         <h2>Edit Quantity</h2>
         <div className="quantity-adjust">
@@ -73,7 +80,7 @@ export const EditScanModal = ({
             +
           </button>
         </div>
-        <button className="submit-quantity button" type="submit">
+        <button className="submit-quantity button positive" type="submit">
           Done
         </button>
       </form>

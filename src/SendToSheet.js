@@ -1,6 +1,6 @@
 import React from "react"
 import { gapi } from "gapi-script"
-import "./App.css"
+import "./App.scss"
 
 export const SendToSheet = ({
   scannedData,
@@ -45,7 +45,11 @@ export const SendToSheet = ({
   return (
     <div className="send-to-sheet">
       {scannedData.length > 0 ? (
-        <button className="button" type="button" onClick={sendScansToSheet}>
+        <button
+          className="button positive"
+          type="button"
+          onClick={sendScansToSheet}
+        >
           Submit Scans
         </button>
       ) : null}

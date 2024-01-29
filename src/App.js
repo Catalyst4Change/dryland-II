@@ -7,7 +7,7 @@ import { DisplayScans } from "./DisplayScans"
 import { SendToSheet } from "./SendToSheet"
 import { SentScansList } from "./SentScansList"
 import logo from "./Assets/DrylandLogo.png"
-import "./App.css"
+import "./App.scss"
 
 export const App = () => {
   const [user, setUser] = useState(null)
@@ -32,7 +32,7 @@ export const App = () => {
   }
 
   const clearScannedData = () => {
-    setSentScans([...sentScans, scannedData])
+    setSentScans([...sentScans, ...scannedData])
     setScannedData([])
   }
 
@@ -98,8 +98,7 @@ export const App = () => {
     </main>
   )
 }
-// sent scans stored in new array
-// confirm scans before submission
+// added hyphens aas valid scan character √
 // login > scan > prompt edit quantity > save > display removable list items > re-scan... > submit
 
 // added matt √
@@ -107,9 +106,8 @@ export const App = () => {
 // make quantity editable √
 // deny camera error loop √
 // add no access error handling √
+// sent scans stored in new array √
 // make sure multiple scans display √
 // need cancel edit quantity button √
 // remove scanned data on sendToSheet √
 // space bar causing invalid qr error √
-
-// add reload prompt if scanning stops X

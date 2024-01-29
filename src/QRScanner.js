@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { convertTimeStamp } from "./timestampConverter"
-import "./App.css"
+import "./App.scss"
 
 const QrReader = React.lazy(() => import("react-qr-scanner"))
 
@@ -18,7 +18,7 @@ export const QRScanner = ({
   // const [validScan, setValidScan] = useState(false)
 
   const validQRCodePattern =
-    /^[A-Za-z0-9 ]+\|[A-Za-z0-9 ]+\|[A-Za-z0-9 ]+\|[A-Za-z0-9 ]+$/
+    /^[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/
   // product | batch | size | quantity
 
   const handleScan = (data) => {

@@ -26,16 +26,16 @@ export const DisplayScans = ({
         return (
           <div className="display-scan-option" key={index}>
             <span>{readableString}</span>
-            <div className="display-scan-option-buttons">
+            <div className="option-buttons">
               <button
-                className="button"
+                className="button neutral"
                 type="button"
                 onClick={() => handleEdit(index)}
               >
                 Edit
               </button>
               <button
-                className="button"
+                className="button negative"
                 type="button"
                 onClick={() => handleRemove(index)}
               >
