@@ -6,82 +6,96 @@ Modal.setAppElement("#root")
 export const EditScanModal = ({
   editModalOpen,
   toggleEditModal,
-  scannedData,
-  editIndex,
-  setEditIndex,
+  scanItem,
   setScannedData,
-  setScanning,
+  editIndex,
 }) => {
-  const [quantityChange, setQuantityChange] = useState()
-  const [timestamp, product, batch, size, quantity, user] =
-    scannedData[editIndex] || editIndex !== null
-      ? scannedData[editIndex]
-      : ["", "", "", "", "", ""]
+  const [quantity, setQuantity] = useState(0)
 
   useEffect(() => {
-    const parsedQuantity = parseInt(quantity)
-
-    if (!isNaN(parsedQuantity)) {
-      setQuantityChange(parsedQuantity)
-    } else {
-      setQuantityChange(0)
-    }
-  }, [quantity])
+    const parsedQuantity = parseInt(scanItem[4])
+    setQuantity(parsedQuantity)
+  }, [scanItem])
 
   const handleQuantityChange = (value) => {
-    setQuantityChange(value)
+    setQuantity(value)
   }
 
   const stepDown = () => {
-    if (quantityChange > 0) {
-      handleQuantityChange(quantityChange - 1)
+    if (quantity > 0) {
+      handleQuantityChange(quantity - 1)
     }
   }
   const stepUp = () => {
-    handleQuantityChange(quantityChange + 1)
+    handleQuantityChange(quantity + 1)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    const updatedScannedData = [...scannedData]
-    updatedScannedData[editIndex][4] = quantityChange
-    setScannedData(updatedScannedData)
-    toggleEditModal()
-    setEditIndex(null)
-    setScanning(true)
+    const updatedItem = [...scanItem]
+    updatedItem[4] = quantity // Update the quantity in the item
+
+    if (editIndex !== null && editIndex >= 0) {
+      // Update an existing item
+      setScannedData((currentScannedData) =>
+        currentScannedData.map((item, index) =>
+          index === editIndex ? updatedItem : item
+        )
+      )
+    } else {
+      // Add a new item
+      setScannedData((currentScannedData) => [
+        ...currentScannedData,
+        updatedItem,
+      ])
+    }
+    toggleEditModal() // Close the modal after submission
+    setQuantity(0)
   }
 
   const handleCancel = () => {
-    toggleEditModal() // Close the modal
-    setEditIndex(null) // Reset the edit index
-    setScanning(false) // Reset scanning state if needed
+    toggleEditModal() // Just close the modal without saving changes
   }
 
   return (
     <Modal
       isOpen={editModalOpen}
-      onRequestClose={onclose}
+      onRequestClose={handleCancel}
       contentLabel="Edit Scan"
     >
-      <form
-        className="modal-form center"
-        onSubmit={(event) => handleSubmit(event)}
-      >
+      <form className="modal-form center" onSubmit={handleSubmit}>
         <h2>Edit Quantity</h2>
         <div className="quantity-adjust">
-          <button type="button" className="stepper button" onClick={stepDown}>
+          <button
+            type="button"
+            className="stepper button positive"
+            onClick={stepDown}
+          >
             -
           </button>
           <div>
-            <p className="quantity-display">{quantityChange}</p>
+            <p className="quantity-display">{quantity}</p>
           </div>
-          <button type="button" className="stepper button" onClick={stepUp}>
+          <button
+            type="button"
+            className="stepper button positive"
+            onClick={stepUp}
+          >
             +
           </button>
         </div>
-        <button className="submit-quantity button positive" type="submit">
-          Done
-        </button>
+        <div className="modal-options">
+          <button
+            className="cancel-quantity button negative"
+            type="button"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button className="submit-quantity button positive" type="submit">
+            Save
+          </button>
+        </div>
       </form>
     </Modal>
   )

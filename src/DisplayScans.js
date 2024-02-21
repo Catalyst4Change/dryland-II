@@ -2,21 +2,15 @@ import React from "react"
 
 export const DisplayScans = ({
   scannedData,
-  setScannedData,
-  changeEditIndex,
+  setEditIndex,
   toggleEditModal,
+  handleRemove,
+  setCurrentScan,
 }) => {
   const handleEdit = (index) => {
-    changeEditIndex(index)
+    setEditIndex(index)
+    setCurrentScan(scannedData[index])
     toggleEditModal()
-  }
-
-  const handleRemove = (index) => {
-    // Implement remove functionality here
-    // You can remove the selected scan from the scans array
-    const updatedScans = [...scannedData]
-    updatedScans.splice(index, 1)
-    setScannedData(updatedScans)
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { QRScanner } from "./QRScanner"
 import { LogIn } from "./LogIn"
 import { DisplayUserMessage } from "./DisplayUserMessage"
@@ -12,14 +12,33 @@ import "./App.scss"
 export const App = () => {
   const [user, setUser] = useState(null)
   const [userMessage, setUserMessage] = useState("")
-  const [scannedData, setScannedData] = useState([])
   const [editIndex, setEditIndex] = useState(null)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [scanning, setScanning] = useState(false)
-  const [sentScans, setSentScans] = useState([])
+  const [currentScan, setCurrentScan] = useState([])
+  const [scannedData, setScannedData] = useState(() => {
+    const storedScannedData = localStorage.getItem("scannedData")
+    return storedScannedData !== null ? JSON.parse(storedScannedData) : []
+  })
+  const [sentScans, setSentScans] = useState(() => {
+    const storedSentScans = localStorage.getItem("sentScans")
+    return storedSentScans !== null ? JSON.parse(storedSentScans) : []
+  })
+
+  useEffect(() => {
+    localStorage.setItem("scannedData", JSON.stringify(scannedData))
+    localStorage.setItem("sentScans", JSON.stringify(sentScans))
+  }, [scannedData, sentScans])
 
   const toggleEditModal = () => {
-    setEditModalOpen((editModalOpen) => !editModalOpen)
+    if (editModalOpen) {
+      setEditModalOpen(false)
+      setScanning(true)
+      clearCurrentData()
+    } else {
+      setEditModalOpen(true)
+      setScanning(false)
+    }
   }
 
   const setUserName = (userName) => {
@@ -27,13 +46,20 @@ export const App = () => {
     setScanning(true)
   }
 
-  const changeEditIndex = (target) => {
-    setEditIndex(target)
+  const handleRemove = (index) => {
+    const updatedScans = [...scannedData]
+    updatedScans.splice(index, 1)
+    setScannedData(updatedScans)
   }
 
   const clearScannedData = () => {
     setSentScans([...sentScans, ...scannedData])
     setScannedData([])
+  }
+
+  const clearCurrentData = () => {
+    setCurrentScan([])
+    setEditIndex(null)
   }
 
   return (
@@ -51,17 +77,23 @@ export const App = () => {
       {scanning ? (
         <QRScanner
           user={user}
+          setCurrentScan={setCurrentScan}
           userMessage={userMessage}
           setUserMessage={setUserMessage}
           scannedData={scannedData}
-          setScannedData={setScannedData}
-          setEditIndex={setEditIndex}
           toggleEditModal={toggleEditModal}
-          setScanning={setScanning}
         />
-      ) : (
-        <></>
-      )}
+      ) : null}
+      {/* edit data and quantity (modal) */}
+
+      <EditScanModal
+        editModalOpen={editModalOpen}
+        toggleEditModal={toggleEditModal}
+        scannedData={scannedData}
+        setScannedData={setScannedData}
+        scanItem={currentScan}
+        editIndex={editIndex}
+      />
 
       <DisplayUserMessage
         userMessage={userMessage}
@@ -70,21 +102,10 @@ export const App = () => {
 
       <DisplayScans
         scannedData={scannedData}
-        setScannedData={setScannedData}
-        changeEditIndex={changeEditIndex}
-        toggleEditModal={toggleEditModal}
-      />
-
-      {/* edit data and quantity (modal) */}
-
-      <EditScanModal
-        editModalOpen={editModalOpen}
-        toggleEditModal={toggleEditModal}
-        scannedData={scannedData}
-        editIndex={editIndex}
         setEditIndex={setEditIndex}
-        setScannedData={setScannedData}
-        setScanning={setScanning}
+        toggleEditModal={toggleEditModal}
+        handleRemove={handleRemove}
+        setCurrentScan={setCurrentScan}
       />
 
       {/* send verified data to sheet */}
@@ -98,16 +119,3 @@ export const App = () => {
     </main>
   )
 }
-// added hyphens aas valid scan character √
-// login > scan > prompt edit quantity > save > display removable list items > re-scan... > submit
-
-// added matt √
-// changed target sheet √
-// make quantity editable √
-// deny camera error loop √
-// add no access error handling √
-// sent scans stored in new array √
-// make sure multiple scans display √
-// need cancel edit quantity button √
-// remove scanned data on sendToSheet √
-// space bar causing invalid qr error √

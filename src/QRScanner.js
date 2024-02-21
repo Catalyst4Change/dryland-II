@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, startTransition } from "react"
 import { convertTimeStamp } from "./timestampConverter"
 import "./App.scss"
 
@@ -6,24 +6,21 @@ const QrReader = React.lazy(() => import("react-qr-scanner"))
 
 export const QRScanner = ({
   user,
+  setCurrentScan,
   userMessage,
   setUserMessage,
   scannedData,
-  setScannedData,
-  setEditIndex,
   toggleEditModal,
-  setScanning,
 }) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
-  // const [validScan, setValidScan] = useState(false)
+  const [scanPressed, setScanPressed] = useState(false)
 
   const validQRCodePattern =
-    /^[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/
-  // product | batch | size | quantity
+    /^[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/ // product | batch | size | quantity
 
   const handleScan = (data) => {
     if (data) {
-      const currentTimeStamp = convertTimeStamp(data.timestamp)
+      const currentTimeStamp = convertTimeStamp(new Date()) // Assuming data.timestamp needs conversion
       parseScanData(data.text, currentTimeStamp)
       updateScannerKey()
     }
@@ -34,27 +31,15 @@ export const QRScanner = ({
   }
 
   const parseScanData = (data, timeStamp) => {
-    // Assuming a format of "Product|Batch|Bottle Size|Quantity"
-    const parts = data.split("|")
-
     if (validQRCodePattern.test(data)) {
+      const parts = data.split("|")
       const [product, batch, bottleSize, quantity] = parts
-      const scanData = [timeStamp, product, batch, bottleSize, quantity, user]
+      const scanItem = [timeStamp, product, batch, bottleSize, quantity, user]
 
-      // Check if the scan already exists in allScans
-      const isDuplicate = scannedData.some(
-        (scan) =>
-          scan[1] === product &&
-          scan[2] === batch &&
-          scan[3] === bottleSize &&
-          scan[4] === quantity
-      )
-
-      if (!isDuplicate) {
-        setScannedData((prevScans) => [...prevScans, scanData])
-        setScanning(false)
+      if (true) {
+        //!isDuplicate
+        setCurrentScan(scanItem)
         toggleEditModal()
-        setEditIndex(scannedData.length)
       } else {
         handleScanError("Duplicate scan detected!")
       }
@@ -63,28 +48,48 @@ export const QRScanner = ({
     }
   }
 
-  // Renews scanner key to refresh dom and avoid scanner quit
+  // Renews scanner key to refresh DOM and avoid scanner quit
   const updateScannerKey = () => {
     setQrReaderKey((prevKey) => prevKey + 1)
   }
 
   useEffect(() => {
     updateScannerKey()
-  }, [scannedData, setScanning, userMessage])
+  }, [scannedData, userMessage])
+
+  const handleButtonDown = () => {
+    startTransition(() => {
+      setScanPressed(true)
+    })
+  }
+  const handleButtonUp = () => {
+    startTransition(() => {
+      setScanPressed(false)
+    })
+  }
 
   return (
     <main className="center">
       <div className={"scanner-window "}>
         <div className="qr-scanner-container">
-          <QrReader
-            key={qrReaderKey}
-            delay={1000}
-            constraints={{ video: { facingMode: "environment" } }}
-            onError={(error) => handleScanError(error)}
-            onScan={(data) => handleScan(data)}
-          />
+          {scanPressed ? (
+            <QrReader
+              key={qrReaderKey}
+              delay={1000}
+              constraints={{ video: { facingMode: "environment" } }}
+              onError={handleScanError}
+              onScan={handleScan}
+            />
+          ) : null}
         </div>
       </div>
+      <button
+        onMouseDown={handleButtonDown}
+        onMouseUp={handleButtonUp}
+        className="scan-now positive"
+      >
+        <span>Scan</span>
+      </button>
     </main>
   )
 }
