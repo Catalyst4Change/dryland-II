@@ -84,8 +84,8 @@ export const QRScanner = ({
       <button
         onTouchStart={handleTouchStart} // Use touch events for mobile
         onTouchEnd={handleTouchEnd} // Use touch events for mobile
-        onMouseDown={handleButtonDown} // Optional: for desktop compatibility
-        onMouseUp={handleButtonUp} // Optional: for desktop compatibility
+        onMouseDown={handleTouchStart} // Optional: for desktop compatibility
+        onMouseUp={handleTouchEnd} // Optional: for desktop compatibility
         className="scan-now positive"
         style={{
           webkitUserSelect: "none",
