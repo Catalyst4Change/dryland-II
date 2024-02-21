@@ -1,0 +1,162 @@
+$neutral-color: darkorange;
+$negative-color: firebrick;
+$positive-color: green;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: white;
+}
+
+img {
+  width: 100%;
+}
+
+.App {
+  padding-top: 5%;
+  width: 100%;
+  height: 100vh;
+}
+
+.hidden {
+  visibility: hidden;
+  height: 0;
+}
+
+button {
+  font-size: large;
+  width: 100%;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  &.negative {
+    background-color: $negative-color;
+  }
+  &.neutral {
+    background-color: $neutral-color;
+  }
+  &.positive {
+    background-color: $positive-color;
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
+.display-scan-option {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px black solid;
+  margin: 10px 0;
+}
+
+.option-buttons {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.logo_container {
+  width: 90vw;
+  margin: auto;
+}
+
+.modal-form {
+  height: 50%;
+}
+
+.qr-scanner-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(67, 67, 67);
+}
+
+.qr-scanner-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scan-display {
+  width: 100%;
+}
+
+.scanner-window {
+  position: relative;
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  place-items: center;
+  justify-content: center;
+
+  width: 90%;
+  max-width: 200px;
+  aspect-ratio: 1/1;
+  max-height: 300px;
+  overflow: hidden;
+
+  border: 3px black solid;
+  border-radius: 15px;
+  margin: 10px auto;
+}
+
+.send-to-sheet {
+  width: 100%;
+  display: flex;
+}
+
+.stepper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  width: 50px;
+  height: 50px;
+  margin: auto;
+}
+
+.quantity-display {
+  font-size: 3em;
+  margin: 0;
+}
+
+.quantity-adjust {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10%;
+}
+
+.green {
+  border: 3px lime solid;
+  transition: border-color 1s ease-out;
+}
+
+.modal-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  button {
+    width: 100px;
+  }
+}

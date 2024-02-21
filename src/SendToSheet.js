@@ -1,45 +1,57 @@
-import { gapi } from "gapi-script";
+import React from "react"
+import { gapi } from "gapi-script"
+import "./App.scss"
 
-export const SendToSheet = (
-  product,
-  batch,
-  bottleSize,
-  quantity,
-  timeStamp,
-  user
-) => {
-  const appendDataToSheet = () => {
+export const SendToSheet = ({
+  scannedData,
+  setUserMessage,
+  clearScannedData,
+}) => {
+  const sendScansToSheet = () => {
     if (!gapi.client) {
-      console.error("Google API not loaded!");
-      return;
+      setUserMessage("Google API not loaded!")
+      return
     }
 
     const params = {
-      spreadsheetId: "1iMdJeg9hhvP8pKldf01Ymfpw77QPMDqo-6T6IJTgbQg",
+      spreadsheetId: "1eOjJmq4Ex8TuBQdFbmeUBcaPWRrKqxXgoNax8GnEspA",
       range: "Sheet1",
       valueInputOption: "USER_ENTERED",
       insertDataOption: "INSERT_ROWS",
-    };
+    }
 
     const valueRangeBody = {
-      values: [[timeStamp, product, batch, bottleSize, quantity, user]],
-    };
+      values: scannedData,
+    }
 
     const request = gapi.client.sheets.spreadsheets.values.append(
       params,
       valueRangeBody
-    );
+    )
     request.then(
       function (response) {
-        console.log("Data sent to sheet.", response);
+        setUserMessage("Data sent successfully!")
+        clearScannedData()
       },
       function (reason) {
-        console.error(
-          "Error sending data to sheet ",
-          reason.result.error.message
-        );
+        setUserMessage(
+          "Error sending data to sheet: " + reason.result.error.message
+        )
       }
-    );
-  };
-  appendDataToSheet();
-};
+    )
+  }
+
+  return (
+    <div className="send-to-sheet">
+      {scannedData.length > 0 ? (
+        <button
+          className="button positive"
+          type="button"
+          onClick={sendScansToSheet}
+        >
+          Submit Scans
+        </button>
+      ) : null}
+    </div>
+  )
+}

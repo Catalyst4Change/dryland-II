@@ -1,0 +1,21 @@
+{
+  "name": "Dry Land Batch Scanner",
+  "short_name": "Dry Land",
+  "description": "Scan proprietary QR codes and submit data to management.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#477979",
+  "icons": [
+    {
+      "src": "/public/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/public/DrylandDatabase.png",
+      "sizes": "500x515",
+      "type": "image/png"
+    }
+  ]
+}

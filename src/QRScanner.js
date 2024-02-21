@@ -1,89 +1,105 @@
-import React, { useState } from "react"
-import QrReader from "react-qr-scanner"
-import { SendToSheet } from "./SendToSheet"
-import "./App.css"
+import React, { useEffect, useState, startTransition } from "react"
+import { convertTimeStamp } from "./timestampConverter"
+import "./App.scss"
 
-export const QRScanner = ({ user }) => {
-  const [delay] = useState(100)
-  const [timeStamp, setTimeStamp] = useState(null)
-  const [scannedProduct, setScannedProduct] = useState(null)
-  const [scannedBatch, setScannedBatch] = useState(null)
-  const [scannedSize, setScannedSize] = useState(null)
-  const [scannedQuantity, setScannedQuantity] = useState(null)
+const QrReader = React.lazy(() => import("react-qr-scanner"))
+
+export const QRScanner = ({
+  user,
+  setCurrentScan,
+  userMessage,
+  setUserMessage,
+  scannedData,
+  toggleEditModal,
+}) => {
+  const [qrReaderKey, setQrReaderKey] = useState(0)
+  const [scanPressed, setScanPressed] = useState(false)
+
+  const validQRCodePattern =
+    /^[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/ // product | batch | size | quantity
 
   const handleScan = (data) => {
     if (data) {
-      parseScanData(data.text)
-      convertTimeStamp(data.timestamp)
+      const currentTimeStamp = convertTimeStamp(new Date()) // Assuming data.timestamp needs conversion
+      parseScanData(data.text, currentTimeStamp)
+      updateScannerKey()
     }
   }
 
-  const handleError = (err) => {
-    console.error("Scan Error: ", err)
+  const handleScanError = (err) => {
+    setUserMessage("Scan Error: " + err)
   }
 
-  // Takes timestamp from QRreader data and converts to readable format
-  const convertTimeStamp = (timeStamp) => {
-    // Create a new Date object from the timestamp
-    const date = new Date(timeStamp)
-
-    // Format the date
-    // Get the day, month, year, hours, and minutes
-    const day = date.getDate().toString().padStart(2, "0")
-    const month = (date.getMonth() + 1).toString().padStart(2, "0") // +1 because months are 0-indexed
-    const year = date.getFullYear().toString().slice(-2) // Get the last two digits of the year
-    const hours = date.getHours().toString().padStart(2, "0")
-    const minutes = date.getMinutes().toString().padStart(2, "0")
-
-    // Combine to get the formatted string
-    const formattedDate = `${month}/${day}/${year} ${hours}:${minutes}`
-
-    setTimeStamp(formattedDate)
-    // Outputs the date in DD/MM/YY HH:MM format
-  }
-
-  const parseScanData = (data) => {
-    // Assuming a format of "Product|Batch|Bottle Size|Quantity"
-    const parts = data.split("|")
-
-    if (parts.length === 4) {
+  const parseScanData = (data, timeStamp) => {
+    if (validQRCodePattern.test(data)) {
+      const parts = data.split("|")
       const [product, batch, bottleSize, quantity] = parts
-      setScannedProduct(product)
-      setScannedBatch(batch)
-      setScannedSize(bottleSize)
-      setScannedQuantity(quantity)
+      const scanItem = [timeStamp, product, batch, bottleSize, quantity, user]
+
+      setCurrentScan(scanItem)
+      toggleEditModal()
     } else {
-      // Handle invalid QR code data format
-      console.error("Invalid QR code data format!")
-      return null
+      handleScanError("Invalid QR code data format!")
     }
   }
 
-  const saveScannedData = () => {
-    SendToSheet(
-      scannedProduct,
-      scannedBatch,
-      scannedSize,
-      scannedQuantity,
-      timeStamp,
-      user
-    )
+  const updateScannerKey = () => {
+    setQrReaderKey((prevKey) => prevKey + 1)
+  }
+
+  useEffect(() => {
+    updateScannerKey()
+  }, [scannedData, userMessage])
+
+  const handleTouchStart = (e) => {
+    e.preventDefault() // Prevent default action
+    startTransition(() => {
+      setScanPressed(true)
+    })
+  }
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault() // Prevent default action
+    startTransition(() => {
+      setScanPressed(false)
+    })
+    updateScannerKey()
   }
 
   return (
-    <main>
-      <div className="scanner-window">
-        <QrReader delay={delay} onError={handleError} onScan={handleScan} />
-      </div>
-      {scannedProduct && (
-        <div>
-          <p>
-            Product: {scannedProduct}, Batch: {scannedBatch}, Size:{" "}
-            {scannedSize}, Quantity: {scannedQuantity}
-          </p>
-          <button onClick={saveScannedData}>SAVE</button>
+    <main className="center">
+      <div className={"scanner-window"}>
+        <div className="qr-scanner-container">
+          {scanPressed ? (
+            <QrReader
+              key={qrReaderKey}
+              delay={1000}
+              constraints={{ video: { facingMode: "environment" } }}
+              onError={handleScanError}
+              onScan={handleScan}
+            />
+          ) : null}
         </div>
-      )}
+      </div>
+      <button
+        onTouchStart={handleTouchStart} // Use touch events for mobile
+        onTouchEnd={handleTouchEnd} // Use touch events for mobile
+        onMouseDown={handleTouchStart} // Optional: for desktop compatibility
+        onMouseUp={handleTouchEnd} // Optional: for desktop compatibility
+        className="scan-now positive"
+        style={{
+          width: "150px",
+          height: "50px",
+          WebkitUserSelect: "none",
+          MozUserSelect: "none",
+          msUserSelect: "none",
+          userSelect: "none",
+          WebkitTapHighlightColor: "transparent",
+          WebkitTouchCallout: "none",
+        }}
+      >
+        <span>HOLD TO SCAN</span>
+      </button>
     </main>
   )
 }
