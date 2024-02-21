@@ -36,19 +36,13 @@ export const QRScanner = ({
       const [product, batch, bottleSize, quantity] = parts
       const scanItem = [timeStamp, product, batch, bottleSize, quantity, user]
 
-      if (true) {
-        //!isDuplicate
-        setCurrentScan(scanItem)
-        toggleEditModal()
-      } else {
-        handleScanError("Duplicate scan detected!")
-      }
+      setCurrentScan(scanItem)
+      toggleEditModal()
     } else {
       handleScanError("Invalid QR code data format!")
     }
   }
 
-  // Renews scanner key to refresh DOM and avoid scanner quit
   const updateScannerKey = () => {
     setQrReaderKey((prevKey) => prevKey + 1)
   }
@@ -57,12 +51,15 @@ export const QRScanner = ({
     updateScannerKey()
   }, [scannedData, userMessage])
 
-  const handleButtonDown = () => {
+  const handleTouchStart = (e) => {
+    e.preventDefault() // Prevent default action
     startTransition(() => {
       setScanPressed(true)
     })
   }
-  const handleButtonUp = () => {
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault() // Prevent default action
     startTransition(() => {
       setScanPressed(false)
     })
@@ -71,7 +68,7 @@ export const QRScanner = ({
 
   return (
     <main className="center">
-      <div className={"scanner-window "}>
+      <div className={"scanner-window"}>
         <div className="qr-scanner-container">
           {scanPressed ? (
             <QrReader
@@ -85,11 +82,23 @@ export const QRScanner = ({
         </div>
       </div>
       <button
-        onMouseDown={handleButtonDown}
-        onMouseUp={handleButtonUp}
+        onTouchStart={handleTouchStart} // Use touch events for mobile
+        onTouchEnd={handleTouchEnd} // Use touch events for mobile
+        onMouseDown={handleTouchStart} // Optional: for desktop compatibility
+        onMouseUp={handleTouchEnd} // Optional: for desktop compatibility
         className="scan-now positive"
+        style={{
+          width: "150px",
+          height: "50px",
+          WebkitUserSelect: "none",
+          MozUserSelect: "none",
+          msUserSelect: "none",
+          userSelect: "none",
+          WebkitTapHighlightColor: "transparent",
+          WebkitTouchCallout: "none",
+        }}
       >
-        <span>Scan</span>
+        <span>HOLD TO SCAN</span>
       </button>
     </main>
   )

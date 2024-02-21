@@ -86,7 +86,7 @@ button {
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: grey;
+  background-color: rgb(67, 67, 67);
 }
 
 .qr-scanner-container video {
@@ -158,14 +158,5 @@ button {
   justify-content: space-around;
   button {
     width: 100px;
-  }
-}
-
-.scan-now {
-  width: 100px;
-  font-size: 2em;
-  height: 50px;
-  span {
-    pointer-events: none;
   }
 }
