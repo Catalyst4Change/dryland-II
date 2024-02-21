@@ -14,7 +14,11 @@ export const EditScanModal = ({
 
   useEffect(() => {
     const parsedQuantity = parseInt(scanItem[4])
-    setQuantity(parsedQuantity)
+    if (!isNaN(parsedQuantity)) {
+      setQuantity(parsedQuantity)
+    } else {
+      setQuantity(0)
+    }
   }, [scanItem])
 
   const handleQuantityChange = (value) => {
