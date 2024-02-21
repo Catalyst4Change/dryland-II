@@ -87,12 +87,6 @@ export const LogIn = ({ user, setUserName, setUserMessage }) => {
           </button>
         </div>
       )}
-      {/* {user && (
-        <div>
-          <h2>Welcome, {user}!</h2>
-          <button onClick={handleSignOutClick}>Log Out</button>
-        </div>
-      )} */}
     </div>
   )
 }

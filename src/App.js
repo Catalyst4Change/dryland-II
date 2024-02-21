@@ -27,8 +27,11 @@ export const App = () => {
   useEffect(() => {
     localStorage.setItem("scannedData", JSON.stringify(scannedData))
     localStorage.setItem("sentScans", JSON.stringify(sentScans))
-    clearLocalStorageIfExpired()
   }, [scannedData, sentScans])
+
+  useEffect(() => {
+    clearLocalStorageIfExpired()
+  }, [])
 
   const toggleEditModal = () => {
     if (editModalOpen) {
