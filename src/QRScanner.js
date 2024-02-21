@@ -88,6 +88,8 @@ export const QRScanner = ({
         onMouseUp={handleTouchEnd} // Optional: for desktop compatibility
         className="scan-now positive"
         style={{
+          width: "100px",
+          height: "50px",
           webkitUserSelect: "none",
           mozUserSelect: "none",
           msUserSelect: "none",
