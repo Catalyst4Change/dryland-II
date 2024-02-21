@@ -90,12 +90,12 @@ export const QRScanner = ({
         style={{
           width: "100px",
           height: "50px",
-          webkitUserSelect: "none",
-          mozUserSelect: "none",
+          WebkitUserSelect: "none",
+          MozUserSelect: "none",
           msUserSelect: "none",
           userSelect: "none",
-          webkitTapHighlightColor: "transparent",
-          webkitTouchCallout: "none",
+          WebkitTapHighlightColor: "transparent",
+          WebkitTouchCallout: "none",
         }}
       >
         <span>Scan</span>
