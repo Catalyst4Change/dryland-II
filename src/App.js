@@ -6,7 +6,6 @@ import { EditScanModal } from "./EditScanModal"
 import { DisplayScans } from "./DisplayScans"
 import { SendToSheet } from "./SendToSheet"
 import { SentScansList } from "./SentScansList"
-import logo from "./Assets/DrylandLogo.png"
 import "./App.scss"
 
 export const App = () => {
@@ -28,6 +27,7 @@ export const App = () => {
   useEffect(() => {
     localStorage.setItem("scannedData", JSON.stringify(scannedData))
     localStorage.setItem("sentScans", JSON.stringify(sentScans))
+    clearLocalStorageIfExpired()
   }, [scannedData, sentScans])
 
   const toggleEditModal = () => {
@@ -62,17 +62,30 @@ export const App = () => {
     setEditIndex(null)
   }
 
+  const clearLocalStorageIfExpired = () => {
+    const storedSentScans = JSON.parse(localStorage.getItem("sentScans"))
+
+    if (storedSentScans) {
+      const currentTime = new Date().getTime()
+
+      // Filter scans to keep those within the last 24 hours
+      const updatedScans = storedSentScans.filter((scan) => {
+        const scanTime = new Date(scan[0]).getTime()
+        return currentTime - scanTime <= 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+      })
+      setSentScans(updatedScans)
+    }
+  }
+
   return (
     <main className="App">
-      <div className="logo_container">
-        <img src={logo} alt="Dry Land Distillery Logo" />
-      </div>
-
-      <LogIn
-        user={user}
-        setUserName={setUserName}
-        setUserMessage={setUserMessage}
-      />
+      {user ? null : (
+        <LogIn
+          user={user}
+          setUserName={setUserName}
+          setUserMessage={setUserMessage}
+        />
+      )}
 
       {scanning ? (
         <QRScanner

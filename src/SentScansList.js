@@ -5,7 +5,7 @@ export const SentScansList = ({ sentScans }) => {
     <div className="scan-display center">
       {sentScans.length > 0 ? (
         <span>
-          <b>Previously sent scans:</b>
+          <b>Previously sent scans will be stored for 24 hours:</b>
         </span>
       ) : null}
       {sentScans.map((scan, index) => {

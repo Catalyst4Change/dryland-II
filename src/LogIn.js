@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
 import { gapi } from "gapi-script"
+import logo from "./Assets/DrylandLogo.png"
 import "./App.scss"
 
 export const LogIn = ({ user, setUserName, setUserMessage }) => {
@@ -74,6 +75,10 @@ export const LogIn = ({ user, setUserName, setUserMessage }) => {
 
   return (
     <div className="center">
+      <div className="logo_container">
+        <img src={logo} alt="Dry Land Distillery Logo" />
+      </div>
+
       {!user && (
         <div>
           <h3>Please Log In to continue.</h3>

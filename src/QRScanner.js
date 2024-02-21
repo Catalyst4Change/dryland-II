@@ -66,6 +66,7 @@ export const QRScanner = ({
     startTransition(() => {
       setScanPressed(false)
     })
+    updateScannerKey()
   }
 
   return (

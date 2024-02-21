@@ -86,6 +86,7 @@ button {
   align-items: center;
   height: 100%;
   width: 100%;
+  background-color: grey;
 }
 
 .qr-scanner-container video {
@@ -107,7 +108,7 @@ button {
   justify-content: center;
 
   width: 90%;
-  max-width: 300px;
+  max-width: 200px;
   aspect-ratio: 1/1;
   max-height: 300px;
   overflow: hidden;
