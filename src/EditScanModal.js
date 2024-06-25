@@ -10,9 +10,19 @@ export const EditScanModal = ({
   setScannedData,
   editIndex,
 }) => {
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState(null)
+  const [isVehicle, setIsVehicle] = useState(false)
+  const [vehicleType, setVehicleType] = useState("")
 
   useEffect(() => {
+    console.log("scanItem:", scanItem)
+    if (scanItem.length > 0) {
+      if (scanItem[1].includes("Vehicle")) {
+        setIsVehicle(true)
+        setVehicleType(scanItem[1].replace("Vehicle: ", ""))
+      }
+    }
+
     const parsedQuantity = parseInt(scanItem[4])
     if (!isNaN(parsedQuantity)) {
       setQuantity(parsedQuantity)
@@ -83,10 +93,17 @@ export const EditScanModal = ({
          submit: date - vehicle - plate - use-time - total-milage
         */}
 
-        {scanItem[1] === "Vehicle" ? (
+        {isVehicle ? (
           <>
-            <h2>Enter Milage:</h2>
+            <h2>Check-in Vehicle:</h2>
+            <p>Vehicle: {vehicleType}</p>
+            <p>Driver: {scanItem[5]}</p>
+            <p>Date: {scanItem[0].slice(0,8)}</p>
+            <p>Time: {scanItem[0].slice(-5)}</p>
             <div className="milage-adjust">
+              <label htmlFor="milage">
+                <p>Enter current milage:</p>
+              </label>
               <input
                 autoFocus
                 type="number"

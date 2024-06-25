@@ -21,7 +21,7 @@ export const QRScanner = ({
   }
 
   const validQRCodePattern =
-    /^[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/
+    /^[A-Za-z0-9 -:]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/
   // product | batch | size | quantity
   // vehicle designator | vehicle number/license plate | check-in/out | milage
 
