@@ -21,6 +21,11 @@ export const EditScanModal = ({
     }
   }, [scanItem])
 
+  const updateMilage = (event) => {
+    event.preventDefault()
+    setQuantity(event.target.value)
+  }
+
   const handleQuantityChange = (value) => {
     setQuantity(value)
   }
@@ -68,26 +73,55 @@ export const EditScanModal = ({
       contentLabel="Edit Scan"
     >
       <form className="modal-form center" onSubmit={handleSubmit}>
-        <h2>Edit Quantity</h2>
-        <div className="quantity-adjust">
-          <button
-            type="button"
-            className="stepper button positive"
-            onClick={stepDown}
-          >
-            -
-          </button>
-          <div>
-            <p className="quantity-display">{quantity}</p>
-          </div>
-          <button
-            type="button"
-            className="stepper button positive"
-            onClick={stepUp}
-          >
-            +
-          </button>
-        </div>
+        {/* 
+        create vehicle designator field (t/f) in QR ["Vehicle: Truck"]
+        strip out vehicle type on scan
+        
+        create new locally-stored state: vehicle status
+         if vehicle scanned, store check-in info inc. milage
+         when vehicle scanned again, calculate use-time (from timestamps), milage
+         submit: date - vehicle - plate - use-time - total-milage
+        */}
+
+        {scanItem[1] === "Vehicle" ? (
+          <>
+            <h2>Enter Milage:</h2>
+            <div className="milage-adjust">
+              <input
+                autoFocus
+                type="number"
+                name="milage"
+                id="milage"
+                value={quantity}
+                onChange={(e) => updateMilage(e)}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <h2>Edit Quantity:</h2>
+            <div className="quantity-adjust">
+              <button
+                type="button"
+                className="stepper button positive"
+                onClick={stepDown}
+              >
+                -
+              </button>
+              <div>
+                <p className="quantity-display">{quantity}</p>
+              </div>
+              <button
+                type="button"
+                className="stepper button positive"
+                onClick={stepUp}
+              >
+                +
+              </button>
+            </div>
+          </>
+        )}
+
         <div className="modal-options">
           <button
             className="cancel-quantity button negative"

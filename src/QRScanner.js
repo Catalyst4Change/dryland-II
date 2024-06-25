@@ -15,12 +15,20 @@ export const QRScanner = ({
   const [qrReaderKey, setQrReaderKey] = useState(0)
   const [scanPressed, setScanPressed] = useState(false)
 
+  const sanitizeInput = (input) => {
+    // Remove script tags to prevent XSS attacks
+    return input.replace(/<script.*?>.*?<\/script>/gi, "")
+  }
+
   const validQRCodePattern =
-    /^[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/ // product | batch | size | quantity
+    /^[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/
+  // product | batch | size | quantity
+  // vehicle designator | vehicle number/license plate | check-in/out | milage
 
   const handleScan = (data) => {
+    console.log("handleScan > data:", data)
     if (data) {
-      const currentTimeStamp = convertTimeStamp(new Date()) // Assuming data.timestamp needs conversion
+      const currentTimeStamp = convertTimeStamp(new Date())
       parseScanData(data.text, currentTimeStamp)
       updateScannerKey()
     }
@@ -34,7 +42,20 @@ export const QRScanner = ({
     if (validQRCodePattern.test(data)) {
       const parts = data.split("|")
       const [product, batch, bottleSize, quantity] = parts
-      const scanItem = [timeStamp, product, batch, bottleSize, quantity, user]
+
+      const sanitizedProduct = sanitizeInput(product) // vehicle
+      const sanitizedBatch = sanitizeInput(batch) // lic. plate
+      const sanitizedBottleSize = sanitizeInput(bottleSize) // check in/out
+      const sanitizedQuantity = sanitizeInput(quantity) // milage
+
+      const scanItem = [
+        timeStamp,
+        sanitizedProduct,
+        sanitizedBatch,
+        sanitizedBottleSize,
+        sanitizedQuantity,
+        user,
+      ]
 
       setCurrentScan(scanItem)
       toggleEditModal()
@@ -46,10 +67,6 @@ export const QRScanner = ({
   const updateScannerKey = () => {
     setQrReaderKey((prevKey) => prevKey + 1)
   }
-
-  useEffect(() => {
-    updateScannerKey()
-  }, [scannedData, userMessage])
 
   const handleTouchStart = (e) => {
     e.preventDefault() // Prevent default action
@@ -89,7 +106,7 @@ export const QRScanner = ({
         className="scan-now positive"
         style={{
           width: "150px",
-          height: "50px",
+          height: "auto",
           WebkitUserSelect: "none",
           MozUserSelect: "none",
           msUserSelect: "none",
