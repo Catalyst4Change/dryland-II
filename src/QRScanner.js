@@ -11,6 +11,7 @@ export const QRScanner = ({
   setUserMessage,
   scannedData,
   toggleEditModal,
+  setIsVehicle,
 }) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
   const [scanPressed, setScanPressed] = useState(false)
@@ -23,7 +24,7 @@ export const QRScanner = ({
   const validQRCodePattern =
     /^[A-Za-z0-9 -:]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+\|[A-Za-z0-9 -]+$/
   // product | batch | size | quantity
-  // vehicle designator | vehicle number/license plate | check-in/out | milage
+  // vehicle designator | vehicle number/license plate | time | milage
 
   const handleScan = (data) => {
     console.log("handleScan > data:", data)
@@ -32,10 +33,6 @@ export const QRScanner = ({
       parseScanData(data.text, currentTimeStamp)
       updateScannerKey()
     }
-  }
-
-  const handleScanError = (err) => {
-    setUserMessage("Scan Error: " + err)
   }
 
   const parseScanData = (data, timeStamp) => {
@@ -57,11 +54,22 @@ export const QRScanner = ({
         user,
       ]
 
+      console.log("sanitizedProduct", sanitizedProduct)
+
       setCurrentScan(scanItem)
-      toggleEditModal()
+      if (sanitizedProduct.includes("Vehicle")) {
+        console.log("scan is vehicle")
+        toggleEditModal(true)
+      } else {
+        toggleEditModal(false)
+      }
     } else {
       handleScanError("Invalid QR code data format!")
     }
+  }
+
+  const handleScanError = (err) => {
+    setUserMessage("Scan Error: " + err)
   }
 
   const updateScannerKey = () => {

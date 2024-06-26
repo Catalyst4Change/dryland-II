@@ -7,14 +7,20 @@ import { DisplayScans } from "./DisplayScans"
 import { SendToSheet } from "./SendToSheet"
 import { SentScansList } from "./SentScansList"
 import "./App.scss"
+import { VehicleModal } from "./VehicleModal"
 
 export const App = () => {
+  // state
   const [user, setUser] = useState(null)
   const [userMessage, setUserMessage] = useState("")
   const [editIndex, setEditIndex] = useState(null)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [scanning, setScanning] = useState(false)
   const [currentScan, setCurrentScan] = useState([])
+  const [isVehicle, setIsVehicle] = useState(false)
+  const [vehicleModalOpen, setVehicleModalOpen] = useState(false)
+
+  // local storage
   const [scannedData, setScannedData] = useState(() => {
     const storedScannedData = localStorage.getItem("scannedData")
     return storedScannedData !== null ? JSON.parse(storedScannedData) : []
@@ -33,15 +39,21 @@ export const App = () => {
     clearLocalStorageIfExpired()
   }, [])
 
-  const toggleEditModal = () => {
-    if (editModalOpen) {
+  const toggleEditModal = (isVehicle) => {
+    if (isVehicle) {
+      setVehicleModalOpen(true)
       setEditModalOpen(false)
-      setScanning(true)
-      clearCurrentData()
     } else {
       setEditModalOpen(true)
-      setScanning(false)
+      setVehicleModalOpen(false)
     }
+    setScanning(false)
+  }
+
+  const closeModals = () => {
+    setVehicleModalOpen(false)
+    setEditModalOpen(false)
+    setScanning(true)
   }
 
   const setUserName = (userName) => {
@@ -98,17 +110,24 @@ export const App = () => {
           setUserMessage={setUserMessage}
           scannedData={scannedData}
           toggleEditModal={toggleEditModal}
+          setIsVehicle={setIsVehicle}
         />
       ) : null}
       {/* edit data and quantity (modal) */}
 
       <EditScanModal
         editModalOpen={editModalOpen}
-        toggleEditModal={toggleEditModal}
+        closeModals={closeModals}
         scannedData={scannedData}
         setScannedData={setScannedData}
         scanItem={currentScan}
         editIndex={editIndex}
+      />
+
+      <VehicleModal
+        vehicleModalOpen={vehicleModalOpen}
+        handleCancel={toggleEditModal}
+        scanItem={currentScan}
       />
 
       <DisplayUserMessage

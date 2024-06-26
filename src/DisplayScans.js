@@ -10,7 +10,7 @@ export const DisplayScans = ({
   const handleEdit = (index) => {
     setEditIndex(index)
     setCurrentScan(scannedData[index])
-    toggleEditModal()
+    // toggleEditModal(false)
   }
 
   return (
