@@ -11,7 +11,6 @@ export const QRScanner = ({
   setUserMessage,
   scannedData,
   toggleEditModal,
-  setIsVehicle,
 }) => {
   const [qrReaderKey, setQrReaderKey] = useState(0)
   const [scanPressed, setScanPressed] = useState(false)
@@ -27,7 +26,6 @@ export const QRScanner = ({
   // vehicle designator | vehicle number/license plate | time | milage
 
   const handleScan = (data) => {
-    console.log("handleScan > data:", data)
     if (data) {
       const currentTimeStamp = convertTimeStamp(new Date())
       parseScanData(data.text, currentTimeStamp)
@@ -54,11 +52,8 @@ export const QRScanner = ({
         user,
       ]
 
-      console.log("sanitizedProduct", sanitizedProduct)
-
       setCurrentScan(scanItem)
       if (sanitizedProduct.includes("Vehicle")) {
-        console.log("scan is vehicle")
         toggleEditModal(true)
       } else {
         toggleEditModal(false)

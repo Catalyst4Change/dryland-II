@@ -13,7 +13,6 @@ export const EditScanModal = ({
   const [quantity, setQuantity] = useState(null)
 
   useEffect(() => {
-    console.log("scanItem:", scanItem)
     if (scanItem.length > 0) {
       const parsedQuantity = parseInt(scanItem[4])
       if (!isNaN(parsedQuantity)) {
@@ -23,7 +22,6 @@ export const EditScanModal = ({
       }
     }
   }, [scanItem])
-
 
   const handleQuantityChange = (value) => {
     setQuantity(value)
@@ -41,27 +39,22 @@ export const EditScanModal = ({
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    if (isVehicle) {
-      // state-managed submission directly to localstorage
-      //
-    } else {
-      const updatedItem = [...scanItem]
-      updatedItem[4] = quantity // Update the quantity in the item
+    const updatedItem = [...scanItem]
+    updatedItem[4] = quantity // Update the quantity in the item
 
-      if (editIndex !== null && editIndex >= 0) {
-        // Update an existing item
-        setScannedData((currentScannedData) =>
-          currentScannedData.map((item, index) =>
-            index === editIndex ? updatedItem : item
-          )
+    if (editIndex !== null && editIndex >= 0) {
+      // Update an existing item
+      setScannedData((currentScannedData) =>
+        currentScannedData.map((item, index) =>
+          index === editIndex ? updatedItem : item
         )
-      } else {
-        // Add a new item
-        setScannedData((currentScannedData) => [
-          ...currentScannedData,
-          updatedItem,
-        ])
-      }
+      )
+    } else {
+      // Add a new item
+      setScannedData((currentScannedData) => [
+        ...currentScannedData,
+        updatedItem,
+      ])
     }
     closeModals() // Close the modal after submission
     setQuantity(0)

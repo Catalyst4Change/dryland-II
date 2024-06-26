@@ -4,7 +4,7 @@ import { LogIn } from "./LogIn"
 import { DisplayUserMessage } from "./DisplayUserMessage"
 import { EditScanModal } from "./EditScanModal"
 import { DisplayScans } from "./DisplayScans"
-import { SendToSheet } from "./SendToSheet"
+import { sendScansToSheet } from "./SendToSheet"
 import { SentScansList } from "./SentScansList"
 import "./App.scss"
 import { VehicleModal } from "./VehicleModal"
@@ -17,7 +17,6 @@ export const App = () => {
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [scanning, setScanning] = useState(false)
   const [currentScan, setCurrentScan] = useState([])
-  const [isVehicle, setIsVehicle] = useState(false)
   const [vehicleModalOpen, setVehicleModalOpen] = useState(false)
 
   // local storage
@@ -48,6 +47,13 @@ export const App = () => {
       setVehicleModalOpen(false)
     }
     setScanning(false)
+  }
+
+  const submitScans = (event) => {
+    event.preventDefault()
+    sendScansToSheet(scannedData, setUserMessage,  1)
+    closeModals()
+    clearScannedData()
   }
 
   const closeModals = () => {
@@ -110,7 +116,6 @@ export const App = () => {
           setUserMessage={setUserMessage}
           scannedData={scannedData}
           toggleEditModal={toggleEditModal}
-          setIsVehicle={setIsVehicle}
         />
       ) : null}
       {/* edit data and quantity (modal) */}
@@ -128,6 +133,8 @@ export const App = () => {
         vehicleModalOpen={vehicleModalOpen}
         handleCancel={toggleEditModal}
         scanItem={currentScan}
+        closeModals={closeModals}
+        setUserMessage={setUserMessage}
       />
 
       <DisplayUserMessage
@@ -144,12 +151,23 @@ export const App = () => {
       />
 
       {/* send verified data to sheet */}
-
-      <SendToSheet
+      <div className="send-to-sheet">
+        {scannedData.length > 0 ? (
+          <button
+            className="button positive"
+            type="button"
+            onClick={(e) => submitScans(e)}
+          >
+            Submit Scans
+          </button>
+        ) : null}
+      </div>
+      {/* <SendToSheet
         scannedData={scannedData}
         setUserMessage={setUserMessage}
         clearScannedData={clearScannedData}
-      />
+        sheetNumber={1}
+      /> */}
       <SentScansList sentScans={sentScans} />
     </main>
   )
