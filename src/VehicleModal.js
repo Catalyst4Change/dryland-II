@@ -79,17 +79,20 @@ export const VehicleModal = ({
       const elapsedMilage = checkInMilage - checkoutMilage
 
       // format data
-      const vehicleReturnData = {
-        checkoutType,
-        vehicleIdentifier,
-        checkoutTime: convertTimeStamp(checkoutTime),
-        checkInTime: convertTimeStamp(checkInTime),
-        elapsedTime: formatElapsedTime(elapsedTime),
-        checkoutMilage,
-        checkInMilage,
-        elapsedMilage,
-        checkoutDriver,
-      }
+      const vehicleReturnData = [
+        [
+          checkoutType,
+          vehicleIdentifier,
+          convertTimeStamp(checkoutTime),
+          convertTimeStamp(checkInTime),
+          formatElapsedTime(elapsedTime),
+          checkoutMilage,
+          checkInMilage,
+          elapsedMilage,
+          checkoutDriver,
+        ],
+      ]
+      
       // submit directly to G sheets (page 2)
       console.log("vehicleReturnData:", vehicleReturnData)
       sendScansToSheet(vehicleReturnData, setUserMessage, 2)
